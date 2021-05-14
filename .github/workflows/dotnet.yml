@@ -18,6 +18,12 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build -c RELEASE --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test -c RELEASE --no-build --verbosity normal
+    - name: Publish
+      run: dotnet publish -c RELEASE ./src/DeviceService/Server/DeviceService.Server.csproj -o ./publish
+    - uses: actions/upload-artifact@v2
+      with:
+        name: deployment
+        path: publish
