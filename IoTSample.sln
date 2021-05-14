@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31306.274
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTSample.Server", "IoTSample\Server\IoTSample.Server.csproj", "{5FDF5C6A-0E4B-4DF0-88EF-12174A727028}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTSample.Server", "IoTSample\Server\IoTSample.Server.csproj", "{5FDF5C6A-0E4B-4DF0-88EF-12174A727028}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTSample.Client", "IoTSample\Client\IoTSample.Client.csproj", "{7C98756A-29AB-436E-B6F1-74DE029C96BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTSample.Client", "IoTSample\Client\IoTSample.Client.csproj", "{7C98756A-29AB-436E-B6F1-74DE029C96BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTSample.Shared", "IoTSample\Shared\IoTSample.Shared.csproj", "{BAE033A2-334B-4B2B-952C-64308B692903}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTSample.Shared", "IoTSample\Shared\IoTSample.Shared.csproj", "{BAE033A2-334B-4B2B-952C-64308B692903}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{99F6D621-2286-4509-AAF1-E0347A5FC586}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +32,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5FDF5C6A-0E4B-4DF0-88EF-12174A727028} = {99F6D621-2286-4509-AAF1-E0347A5FC586}
+		{7C98756A-29AB-436E-B6F1-74DE029C96BF} = {99F6D621-2286-4509-AAF1-E0347A5FC586}
+		{BAE033A2-334B-4B2B-952C-64308B692903} = {99F6D621-2286-4509-AAF1-E0347A5FC586}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F06AD16E-6D8F-4DF4-9886-B90786C0C8CF}
