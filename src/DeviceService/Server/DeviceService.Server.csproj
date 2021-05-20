@@ -8,9 +8,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Azure" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\IotSample.IotHub\IotSample.IotHub.csproj" />
     <ProjectReference Include="..\Client\DeviceService.Client.csproj" />
     <ProjectReference Include="..\Shared\DeviceService.Shared.csproj" />
   </ItemGroup>
@@ -18,8 +20,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.6" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.6" NoWarn="NU1605" />
-    <PackageReference Include="Microsoft.Identity.Web" Version="1.1.0" />
-    <PackageReference Include="Microsoft.Identity.Web.UI" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Identity.Web" Version="1.10.0" />
+    <PackageReference Include="Microsoft.Identity.Web.UI" Version="1.10.0" />
   </ItemGroup>
 
 </Project>

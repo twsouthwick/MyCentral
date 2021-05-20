@@ -1,0 +1,57 @@
+﻿@using DeviceService.Shared
+@inject HttpClient Http
+
+<input @bind="hostname" />
+<button @onclick="UpdateHost">Update</button>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (hostname is null)
+{
+    <p><em>Please enter a hostname.</em></p>
+}
+else if (devices == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var device in devices)
+            {
+                <tr>
+                    <td>@device.DeviceId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private string hostname;
+    private DeviceInfo[] devices;
+
+    private bool HasHostName => !string.IsNullOrEmpty(hostname);
+
+    protected override Task OnInitializedAsync()
+        => UpdateHost();
+
+    private async Task UpdateHost()
+    {
+        if (string.IsNullOrEmpty(hostname))
+        {
+            devices = null;
+            return;
+        }
+
+        devices = await Http.GetFromJsonAsync<DeviceInfo[]>($"devices/{hostname}");
+        StateHasChanged();
+    }
+
+}
