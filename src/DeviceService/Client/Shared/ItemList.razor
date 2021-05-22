@@ -1,0 +1,34 @@
+﻿@using CustomService.Client
+@using System.Collections.Immutable;
+
+@inherits BlazorObserver<Item>
+
+@{
+    var list = _list;
+}
+
+<div>
+    @if (list.IsEmpty)
+    {
+        <p>No content</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (var item in list)
+            {
+                <li>@item.User : @item.Message</li>
+            }
+        </ul>
+    }
+</div>
+
+@code {
+    private ImmutableList<Item> _list = ImmutableList<Item>.Empty;
+
+    public override void OnNext(Item value)
+    {
+        System.Threading.Interlocked.Exchange(ref _list, _list.Add(value));
+        StateHasChanged();
+    }
+}

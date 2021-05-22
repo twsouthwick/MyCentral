@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.31306.274
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{99F6D621-2286-4509-AAF1-E0347A5FC586}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceService.Server", "src\DeviceService\Server\DeviceService.Server.csproj", "{326B9D37-153F-4138-90C4-E4430EA18BB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeviceService.Server", "src\DeviceService\Server\DeviceService.Server.csproj", "{326B9D37-153F-4138-90C4-E4430EA18BB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceService.Client", "src\DeviceService\Client\DeviceService.Client.csproj", "{0401C920-B0FB-476A-B7E9-BFA50E94265A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeviceService.Client", "src\DeviceService\Client\DeviceService.Client.csproj", "{0401C920-B0FB-476A-B7E9-BFA50E94265A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceService.Shared", "src\DeviceService\Shared\DeviceService.Shared.csproj", "{B7FA110F-D429-4327-AC63-0F23D1390F81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeviceService.Shared", "src\DeviceService\Shared\DeviceService.Shared.csproj", "{B7FA110F-D429-4327-AC63-0F23D1390F81}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{140F93B8-1DAF-4EC1-A84C-3D4492BD1BA9}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,7 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IotSample.IotHub", "src\IotSample.IotHub\IotSample.IotHub.csproj", "{DDE33B84-0DEF-4485-B822-2AD826F2A79C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IotSample.IotHub", "src\IotSample.IotHub\IotSample.IotHub.csproj", "{DDE33B84-0DEF-4485-B822-2AD826F2A79C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomService.Client", "src\CustomService.Client\CustomService.Client.csproj", "{E2E06435-0DF8-43CC-B939-8DD611DE1940}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{DDE33B84-0DEF-4485-B822-2AD826F2A79C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDE33B84-0DEF-4485-B822-2AD826F2A79C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDE33B84-0DEF-4485-B822-2AD826F2A79C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2E06435-0DF8-43CC-B939-8DD611DE1940}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2E06435-0DF8-43CC-B939-8DD611DE1940}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2E06435-0DF8-43CC-B939-8DD611DE1940}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2E06435-0DF8-43CC-B939-8DD611DE1940}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +56,7 @@ Global
 		{0401C920-B0FB-476A-B7E9-BFA50E94265A} = {99F6D621-2286-4509-AAF1-E0347A5FC586}
 		{B7FA110F-D429-4327-AC63-0F23D1390F81} = {99F6D621-2286-4509-AAF1-E0347A5FC586}
 		{DDE33B84-0DEF-4485-B822-2AD826F2A79C} = {99F6D621-2286-4509-AAF1-E0347A5FC586}
+		{E2E06435-0DF8-43CC-B939-8DD611DE1940} = {99F6D621-2286-4509-AAF1-E0347A5FC586}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F06AD16E-6D8F-4DF4-9886-B90786C0C8CF}

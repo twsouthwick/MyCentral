@@ -1,3 +1,4 @@
+using CustomService.Client;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +24,11 @@ namespace DeviceService.Client
 
             // Supply HttpClient instances that include access tokens when making requests to the server project
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("DeviceService.ServerAPI"));
+
+            builder.Services.AddCustomServiceClient(options =>
+            {
+                options.ServiceEndpoint = builder.HostEnvironment.BaseAddress;
+            });
 
             builder.Services.AddMsalAuthentication(options =>
             {
