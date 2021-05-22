@@ -7,7 +7,8 @@ namespace CustomService.Client
     {
         public static void AddCustomServiceClient(this IServiceCollection services, Action<EventClientOptions> configure)
         {
-            services.AddScoped<EventClient>();
+            services.AddSingleton<EventClientFactory>();
+            services.AddSingleton<ServiceClientFactory>();
             services.AddOptions<EventClientOptions>()
                 .Configure(configure);
         }

@@ -1,4 +1,4 @@
-﻿@inject CustomService.Client.EventClient Client;
+﻿@using CustomService.Client
 
 <div class="form-group">
     <label>
@@ -16,11 +16,14 @@
 
 <hr>
 
-<ItemList Observable="@Client" />
+<ItemList Observable="@Client.EventClient" />
 
 @code {
     private string userInput;
     private string messageInput;
 
-    private Task Send() => Client.Send(userInput, messageInput);
+    [CascadingParameter]
+    protected ServiceClient Client { get; set; }
+
+    private Task Send() => Client.EventClient.Send(userInput, messageInput);
 }

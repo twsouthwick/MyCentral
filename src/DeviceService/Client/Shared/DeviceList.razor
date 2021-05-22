@@ -1,5 +1,9 @@
 ﻿@using DeviceService.Shared
+@using CustomService.Client
+
+@inject ServiceClientFactory ClientFactory
 @inject HttpClient Http
+@implements IAsyncDisposable
 
 <input @bind="hostname" />
 <button @onclick="UpdateHost">Update</button>
@@ -10,32 +14,17 @@
 {
     <p><em>Please enter a hostname.</em></p>
 }
-else if (devices == null)
+else if(client is not null)
 {
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var device in devices)
-            {
-                <tr>
-                    <td>@device.DeviceId</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <CascadingValue Value="client">
+        <SignalRTest />
+    </CascadingValue>
 }
 
 @code {
     private string hostname;
     private DeviceInfo[] devices;
+    private ServiceClient client;
 
     private bool HasHostName => !string.IsNullOrEmpty(hostname);
 
@@ -44,14 +33,34 @@ else
 
     private async Task UpdateHost()
     {
+        if (string.Equals(hostname, client?.HostName, StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        if (client is not null)
+        {
+            await client.DisposeAsync();
+            client = null;
+        }
+
         if (string.IsNullOrEmpty(hostname))
         {
             devices = null;
             return;
         }
 
-        devices = await Http.GetFromJsonAsync<DeviceInfo[]>($"devices/{hostname}");
+        client = ClientFactory.CreateClient(hostname);
+
+        @*devices = await Http.GetFromJsonAsync<DeviceInfo[]>($"devices/{hostname}");*@
         StateHasChanged();
     }
 
+    public async ValueTask DisposeAsync()
+    {
+        if (client is not null)
+        {
+            await client.DisposeAsync();
+        }
+    }
 }
