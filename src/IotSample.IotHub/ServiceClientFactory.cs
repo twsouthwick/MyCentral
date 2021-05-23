@@ -1,11 +1,8 @@
 ﻿using Azure.Core;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Azure.Devices;
 using Microsoft.Azure.Devices.Common.Exceptions;
 using Microsoft.Azure.Devices.Shared;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Identity.Web;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -19,25 +16,6 @@ namespace IotSample.IotHub
         public static void AddIotHub(this IServiceCollection services)
         {
             services.AddSingleton<ServiceClientFactory>();
-            services.AddMvcCore()
-                .AddMvcOptions(options =>
-                {
-                    options.Filters.Add(new IotHubFilter());
-                });
-        }
-    }
-
-    public class IotHubFilter : IResultFilter
-    {
-        public void OnResultExecuted(ResultExecutedContext context)
-        {
-            if (context.Exception is IotHubCommunicationException iotHubException)
-            {
-            }
-        }
-
-        public void OnResultExecuting(ResultExecutingContext context)
-        {
         }
     }
 
@@ -73,6 +51,10 @@ namespace IotSample.IotHub
             _registry.Dispose();
 
             return new ValueTask();
+        }
+
+        public async Task ConnectEvents()
+        {
         }
 
         public async IAsyncEnumerable<Twin> GetDevicesAsync([EnumeratorCancellation] CancellationToken token)
