@@ -12,5 +12,6 @@
   <ItemGroup>
     <ProjectReference Include="..\MyCentral.Client.SignalR\MyCentral.Client.SignalR.csproj" />
     <ProjectReference Include="..\MyCentral.Client.Abstractions\MyCentral.Client.Abstractions.csproj" />
+    <ProjectReference Include="..\MyCentral.Components\MyCentral.Components.csproj" />
   </ItemGroup>
 </Project>

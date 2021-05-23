@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
 
-namespace MyCentral.Browser.Shared
+namespace MyCentral.Components
 {
     public class BlazorObserver<TItem> : ComponentBase, IDisposable, IObserver<TItem>
     {

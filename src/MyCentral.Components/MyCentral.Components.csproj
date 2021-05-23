@@ -13,4 +13,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MyCentral.Client.Abstractions\MyCentral.Client.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>

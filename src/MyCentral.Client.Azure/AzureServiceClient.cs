@@ -32,10 +32,6 @@ namespace MyCentral.Client.Azure
             return new ValueTask();
         }
 
-        public async Task ConnectEvents()
-        {
-        }
-
         public async IAsyncEnumerable<Twin> GetDevicesAsync([EnumeratorCancellation] CancellationToken token)
         {
             var query = _registry.CreateQuery(@"select deviceId,
