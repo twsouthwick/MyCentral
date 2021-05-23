@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace DeviceService.Server.Hubs
+namespace MyCentral.Web.Hubs
 {
     public class IoTEventHub : Hub
     {

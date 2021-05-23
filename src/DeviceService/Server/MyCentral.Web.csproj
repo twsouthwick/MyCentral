@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\IotSample.IotHub\MyCentral.Client.Azure.csproj" />
-    <ProjectReference Include="..\Client\DeviceService.Client.csproj" />
+    <ProjectReference Include="..\Client\MyCentral.Browser.csproj" />
     <ProjectReference Include="..\Shared\MyCentral.Client.Abstractions.csproj" />
   </ItemGroup>
 

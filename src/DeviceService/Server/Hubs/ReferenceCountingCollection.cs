@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace DeviceService.Server.Hubs
+namespace MyCentral.Web.Hubs
 {
     public class ReferenceCountingCollection<TKey> : IEnumerable<TKey>
     {

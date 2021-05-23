@@ -6,7 +6,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace DeviceService.Client
+namespace MyCentral.Browser
 {
     public class Program
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 
-namespace DeviceService.Server.Hubs
+namespace MyCentral.Web.Hubs
 {
     public class EventHubConnections
     {

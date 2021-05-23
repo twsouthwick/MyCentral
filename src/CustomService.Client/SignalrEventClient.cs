@@ -7,39 +7,6 @@ using System.Threading.Tasks;
 
 namespace MyCentral.Client.SignalR
 {
-    public class ServiceClientFactory
-    {
-        private readonly SignalrEventClientFactory _eventClientFactory;
-
-        public ServiceClientFactory(SignalrEventClientFactory eventClientFactory)
-        {
-            _eventClientFactory = eventClientFactory;
-        }
-
-        public SignalrServiceClient CreateClient(string hostname)
-            => new(hostname, _eventClientFactory.Create(hostname));
-    }
-
-    public class SignalrServiceClient : IServiceClient, IAsyncDisposable
-    {
-        public SignalrServiceClient(string hostname, SignalrEventClient eventClient)
-        {
-            HostName = hostname;
-            EventClient = eventClient;
-        }
-
-        public SignalrEventClient EventClient { get; }
-
-        public string HostName { get; }
-
-        public IObservable<Item> Events => EventClient;
-
-        public ValueTask DisposeAsync()
-        {
-            return EventClient.DisposeAsync();
-        }
-    }
-
     public class SignalrEventClient : IAsyncDisposable, IObservable<Item>
     {
         private readonly HubConnection _hubConnection;

@@ -1,6 +1,6 @@
 using Azure.Core;
 using Azure.Identity;
-using DeviceService.Server.Hubs;
+using MyCentral.Web.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +12,7 @@ using Microsoft.Identity.Web;
 using MyCentral.Client.Azure;
 using System.Linq;
 
-namespace DeviceService.Server
+namespace MyCentral.Web
 {
     public class Startup
     {

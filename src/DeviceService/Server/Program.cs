@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace DeviceService.Server
+namespace MyCentral.Web
 {
     public class Program
     {
