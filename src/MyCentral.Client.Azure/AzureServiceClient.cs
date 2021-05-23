@@ -54,13 +54,6 @@ namespace MyCentral.Client.Azure
         }
 
         IDisposable IObservable<Item>.Subscribe(IObserver<Item> observer)
-            => new EmptyDisposable();
-
-        private class EmptyDisposable : IDisposable
-        {
-            public void Dispose()
-            {
-            }
-        }
+            => EmptyDisposable.Instance;
     }
 }
