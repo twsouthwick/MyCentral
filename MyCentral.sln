@@ -1,15 +1,15 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31306.274
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{99F6D621-2286-4509-AAF1-E0347A5FC586}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCentral.Web", "src\DeviceService\Server\MyCentral.Web.csproj", "{326B9D37-153F-4138-90C4-E4430EA18BB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCentral.Web", "src\MyCentral.Web\MyCentral.Web.csproj", "{326B9D37-153F-4138-90C4-E4430EA18BB4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCentral.Browser", "src\DeviceService\Client\MyCentral.Browser.csproj", "{0401C920-B0FB-476A-B7E9-BFA50E94265A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCentral.Browser", "src\MyCentral.Browser\MyCentral.Browser.csproj", "{0401C920-B0FB-476A-B7E9-BFA50E94265A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCentral.Client.Abstractions", "src\DeviceService\Shared\MyCentral.Client.Abstractions.csproj", "{B7FA110F-D429-4327-AC63-0F23D1390F81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCentral.Client.Abstractions", "src\MyCentral.Client.Abstractions\MyCentral.Client.Abstractions.csproj", "{B7FA110F-D429-4327-AC63-0F23D1390F81}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{140F93B8-1DAF-4EC1-A84C-3D4492BD1BA9}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,9 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCentral.Client.Azure", "src\IotSample.IotHub\MyCentral.Client.Azure.csproj", "{DDE33B84-0DEF-4485-B822-2AD826F2A79C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCentral.Client.Azure", "src\MyCentral.Client.Azure\MyCentral.Client.Azure.csproj", "{DDE33B84-0DEF-4485-B822-2AD826F2A79C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCentral.Client.SignalR", "src\CustomService.Client\MyCentral.Client.SignalR.csproj", "{E2E06435-0DF8-43CC-B939-8DD611DE1940}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCentral.Client.SignalR", "src\MyCentral.Client.SignalR\MyCentral.Client.SignalR.csproj", "{E2E06435-0DF8-43CC-B939-8DD611DE1940}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
