@@ -1,7 +1,6 @@
 ﻿@using DeviceService.Shared
-@using CustomService.Client
 
-@inject ServiceClientFactory ClientFactory
+@inject IServiceClientFactory ClientFactory
 @inject HttpClient Http
 @implements IAsyncDisposable
 
@@ -24,7 +23,7 @@ else if(client is not null)
 @code {
     private string hostname;
     private DeviceInfo[] devices;
-    private ServiceClient client;
+    private IServiceClient client;
 
     private bool HasHostName => !string.IsNullOrEmpty(hostname);
 

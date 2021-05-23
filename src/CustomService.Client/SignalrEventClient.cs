@@ -2,36 +2,37 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
-namespace CustomService.Client
+namespace MyCentral.Client.SignalR
 {
     public class ServiceClientFactory
     {
-        private readonly EventClientFactory _eventClientFactory;
+        private readonly SignalrEventClientFactory _eventClientFactory;
 
-        public ServiceClientFactory(EventClientFactory eventClientFactory)
+        public ServiceClientFactory(SignalrEventClientFactory eventClientFactory)
         {
             _eventClientFactory = eventClientFactory;
         }
 
-        public ServiceClient CreateClient(string hostname)
+        public SignalrServiceClient CreateClient(string hostname)
             => new(hostname, _eventClientFactory.Create(hostname));
     }
 
-    public class ServiceClient : IAsyncDisposable
+    public class SignalrServiceClient : IServiceClient, IAsyncDisposable
     {
-        public ServiceClient(string hostname, EventClient eventClient)
+        public SignalrServiceClient(string hostname, SignalrEventClient eventClient)
         {
             HostName = hostname;
             EventClient = eventClient;
         }
 
-        public EventClient EventClient { get; }
+        public SignalrEventClient EventClient { get; }
 
         public string HostName { get; }
+
+        public IObservable<Item> Events => EventClient;
 
         public ValueTask DisposeAsync()
         {
@@ -39,27 +40,13 @@ namespace CustomService.Client
         }
     }
 
-    public class EventClientFactory
-    {
-        private readonly IOptions<EventClientOptions> _options;
-        private readonly ILoggerProvider _loggerProvider;
-
-        public EventClientFactory(IOptions<EventClientOptions> options, ILoggerProvider loggerProvider)
-        {
-            _options = options;
-            _loggerProvider = loggerProvider;
-        }
-
-        public EventClient Create(string hostname) => new(_options, _loggerProvider, hostname);
-    }
-
-    public class EventClient : IAsyncDisposable, IObservable<Item>
+    public class SignalrEventClient : IAsyncDisposable, IObservable<Item>
     {
         private readonly HubConnection _hubConnection;
         private readonly Subject<Item> _subject;
         private readonly Task _started;
 
-        public EventClient(IOptions<EventClientOptions> options, ILoggerProvider loggingProvider, string hostname)
+        public SignalrEventClient(IOptions<EventClientOptions> options, ILoggerProvider loggingProvider, string hostname)
         {
             var url = new UriBuilder(options.Value.ServiceEndpoint)
             {

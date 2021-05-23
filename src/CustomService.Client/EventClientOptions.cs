@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CustomService.Client
+namespace MyCentral.Client.SignalR
 {
     public class EventClientOptions
     {

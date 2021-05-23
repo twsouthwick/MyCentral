@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeviceService.Server", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeviceService.Client", "src\DeviceService\Client\DeviceService.Client.csproj", "{0401C920-B0FB-476A-B7E9-BFA50E94265A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeviceService.Shared", "src\DeviceService\Shared\DeviceService.Shared.csproj", "{B7FA110F-D429-4327-AC63-0F23D1390F81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCentral.Client.Abstractions", "src\DeviceService\Shared\MyCentral.Client.Abstractions.csproj", "{B7FA110F-D429-4327-AC63-0F23D1390F81}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{140F93B8-1DAF-4EC1-A84C-3D4492BD1BA9}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,9 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IotSample.IotHub", "src\IotSample.IotHub\IotSample.IotHub.csproj", "{DDE33B84-0DEF-4485-B822-2AD826F2A79C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCentral.Client.Azure", "src\IotSample.IotHub\MyCentral.Client.Azure.csproj", "{DDE33B84-0DEF-4485-B822-2AD826F2A79C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomService.Client", "src\CustomService.Client\CustomService.Client.csproj", "{E2E06435-0DF8-43CC-B939-8DD611DE1940}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCentral.Client.SignalR", "src\CustomService.Client\MyCentral.Client.SignalR.csproj", "{E2E06435-0DF8-43CC-B939-8DD611DE1940}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

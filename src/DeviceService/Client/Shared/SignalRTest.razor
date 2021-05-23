@@ -1,6 +1,4 @@
-﻿@using CustomService.Client
-
-<div class="form-group">
+﻿@*<div class="form-group">
     <label>
         User:
         <input @bind="userInput" />
@@ -12,18 +10,16 @@
         <input @bind="messageInput" size="50" />
     </label>
 </div>
-<button @onclick="Send">Send</button>
+<button @onclick="Send">Send</button>*@
 
-<hr>
+@*<hr>*@
 
-<ItemList Observable="@Client.EventClient" />
+<ItemList Observable="@Client.Events" />
 
 @code {
     private string userInput;
     private string messageInput;
 
     [CascadingParameter]
-    protected ServiceClient Client { get; set; }
-
-    private Task Send() => Client.EventClient.Send(userInput, messageInput);
+    protected IServiceClient Client { get; set; }
 }

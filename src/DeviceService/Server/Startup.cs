@@ -1,17 +1,15 @@
 using Azure.Core;
 using Azure.Identity;
 using DeviceService.Server.Hubs;
-using IotSample.IotHub;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
+using MyCentral.Client.Azure;
 using System.Linq;
 
 namespace DeviceService.Server
@@ -36,7 +34,7 @@ namespace DeviceService.Server
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddSingleton<TokenCredential, DefaultAzureCredential>();
-            services.AddIotHub();
+            services.AddAzureMyCentral();
             services.AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(

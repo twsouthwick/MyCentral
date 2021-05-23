@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CustomService.Client\CustomService.Client.csproj" />
-    <ProjectReference Include="..\Shared\DeviceService.Shared.csproj" />
+    <ProjectReference Include="..\..\CustomService.Client\MyCentral.Client.SignalR.csproj" />
+    <ProjectReference Include="..\Shared\MyCentral.Client.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

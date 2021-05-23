@@ -1,46 +1,25 @@
-﻿using Azure.Core;
-using Microsoft.Azure.Devices;
-using Microsoft.Azure.Devices.Common.Exceptions;
+﻿using Microsoft.Azure.Devices;
 using Microsoft.Azure.Devices.Shared;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace IotSample.IotHub
+namespace MyCentral.Client.Azure
 {
-    public static class ServiceExtensions
-    {
-        public static void AddIotHub(this IServiceCollection services)
-        {
-            services.AddSingleton<ServiceClientFactory>();
-        }
-    }
-
-    public class ServiceClientFactory
-    {
-        private readonly TokenCredential _credential;
-
-        public ServiceClientFactory(TokenCredential credential)
-        {
-            _credential = credential;
-        }
-
-        public DeviceManager CreateClient(string name)
-            => new DeviceManager(
-                ServiceClient.Create(name, _credential),
-                RegistryManager.Create(name, _credential));
-    }
-
-    public class DeviceManager : IAsyncDisposable
+    public class AzureServiceClient : IAsyncDisposable, IServiceClient, IObservable<Item>
     {
         private readonly ServiceClient _client;
         private readonly RegistryManager _registry;
 
-        public DeviceManager(ServiceClient client, RegistryManager registry)
+        public string HostName { get; }
+
+        public IObservable<Item> Events => this;
+
+        public AzureServiceClient(string name, ServiceClient client, RegistryManager registry)
         {
+            HostName = name;
             _client = client;
             _registry = registry;
         }
@@ -75,6 +54,16 @@ namespace IotSample.IotHub
                 {
                     yield break;
                 }
+            }
+        }
+
+        IDisposable IObservable<Item>.Subscribe(IObserver<Item> observer)
+            => new EmptyDisposable();
+
+        private class EmptyDisposable : IDisposable
+        {
+            public void Dispose()
+            {
             }
         }
     }
