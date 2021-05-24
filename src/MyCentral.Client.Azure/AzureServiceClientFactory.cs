@@ -12,11 +12,11 @@ namespace MyCentral.Client.Azure
             _credential = credential;
         }
 
-        public IServiceClient CreateClient(string name)
+        public IServiceClient CreateClient(string name, string eventConnectionString)
             => new AzureServiceClient(
                 name,
                 ServiceClient.Create(name, _credential),
                 RegistryManager.Create(name, _credential),
-                new AzureEventClient(name, _credential));
+                new AzureEventClient(eventConnectionString));
     }
 }

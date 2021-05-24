@@ -27,7 +27,6 @@ namespace MyCentral.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSignalR();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
 
@@ -35,12 +34,12 @@ namespace MyCentral.Web
             services.AddRazorPages();
             services.AddSingleton<TokenCredential, DefaultAzureCredential>();
             services.AddAzureMyCentral();
+            services.AddMyCentralSignalRService();
             services.AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" });
             });
-            services.AddSingleton<EventHubConnections>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,7 +72,7 @@ namespace MyCentral.Web
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
-                endpoints.MapHub<IoTEventHub>("/events");
+                endpoints.MapMyCentralSignalr();
                 endpoints.MapFallbackToFile("index.html");
             });
         }

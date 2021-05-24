@@ -2,6 +2,6 @@
 {
     public interface IServiceClientFactory
     {
-        IServiceClient CreateClient(string name);
+        IServiceClient CreateClient(string name, string eventConnectionString);
     }
 }

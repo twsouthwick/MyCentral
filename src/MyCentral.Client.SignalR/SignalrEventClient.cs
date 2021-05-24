@@ -13,12 +13,12 @@ namespace MyCentral.Client.SignalR
         private readonly Subject<Item> _subject;
         private readonly Task _started;
 
-        public SignalrEventClient(IOptions<EventClientOptions> options, ILoggerProvider loggingProvider, string hostname)
+        public SignalrEventClient(IOptions<EventClientOptions> options, ILoggerProvider loggingProvider, string hostname, string eventConnectionString)
         {
             var url = new UriBuilder(options.Value.ServiceEndpoint)
             {
                 Path = "events",
-                Query = $"host={hostname}"
+                Query = $"host={hostname}&eventsConnectionString={eventConnectionString}",
             }.Uri;
 
             _hubConnection = new HubConnectionBuilder()
@@ -55,10 +55,11 @@ namespace MyCentral.Client.SignalR
 
         public async ValueTask DisposeAsync()
         {
+            await _hubConnection.DisposeAsync();
+
             _started.Dispose();
             _subject.OnCompleted();
             _subject.Dispose();
-            await _hubConnection.DisposeAsync();
         }
 
         public IDisposable Subscribe(IObserver<Item> observer)

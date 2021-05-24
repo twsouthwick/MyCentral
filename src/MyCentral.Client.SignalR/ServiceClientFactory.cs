@@ -9,7 +9,7 @@
             _eventClientFactory = eventClientFactory;
         }
 
-        public IServiceClient CreateClient(string hostname)
-            => new SignalrServiceClient(hostname, _eventClientFactory.Create(hostname));
+        public IServiceClient CreateClient(string hostname, string eventConnectionString)
+            => new SignalrServiceClient(hostname, _eventClientFactory.Create(hostname, eventConnectionString));
     }
 }

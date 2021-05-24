@@ -3,8 +3,13 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Azure.Messaging.EventHubs" Version="5.4.1" />
     <PackageReference Include="Microsoft.Azure.Devices" Version="1.34.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="System.Interactive" Version="5.0.0" />
+    <PackageReference Include="System.Interactive.Async" Version="5.0.0" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Azure.Devices.Provisioning.Service" Version="1.17.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyCentral.Client.Abstractions\MyCentral.Client.Abstractions.csproj" />

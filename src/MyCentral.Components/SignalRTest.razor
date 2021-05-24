@@ -1,25 +1,6 @@
-﻿@*<div class="form-group">
-    <label>
-        User:
-        <input @bind="userInput" />
-    </label>
-</div>
-<div class="form-group">
-    <label>
-        Message:
-        <input @bind="messageInput" size="50" />
-    </label>
-</div>
-<button @onclick="Send">Send</button>*@
-
-@*<hr>*@
-
-<ItemList Observable="@Client.Events" />
+﻿<ItemList Observable="@Client.Events" />
 
 @code {
-    private string userInput;
-    private string messageInput;
-
     [CascadingParameter]
     protected IServiceClient Client { get; set; }
 }

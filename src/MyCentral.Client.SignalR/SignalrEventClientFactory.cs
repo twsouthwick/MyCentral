@@ -14,6 +14,6 @@ namespace MyCentral.Client.SignalR
             _loggerProvider = loggerProvider;
         }
 
-        public SignalrEventClient Create(string hostname) => new(_options, _loggerProvider, hostname);
+        public SignalrEventClient Create(string hostname, string eventConnectionString) => new(_options, _loggerProvider, hostname, eventConnectionString);
     }
 }

@@ -1,28 +1,31 @@
 ﻿using Azure.Core;
+using Azure.Messaging.EventHubs.Consumer;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyCentral.Client.Azure
 {
     public class AzureEventClient : IEventClient
     {
-        private readonly string _hostname;
-        private readonly TokenCredential _credential;
+        private readonly EventHubConsumerClient _events;
+        private readonly IObservable<Item> _observable;
 
-        public AzureEventClient(string hostname, TokenCredential credential)
+        public AzureEventClient(string eventConnectionString)
         {
-            _hostname = hostname;
-            _credential = credential;
+            _events = new EventHubConsumerClient(EventHubConsumerClient.DefaultConsumerGroupName, eventConnectionString);
+            _observable = _events.ReadEventsAsync()
+                .Select(t => new Item(t.Data.PartitionKey, t.Data.SequenceNumber.ToString()))
+                .ToObservable();
         }
+
+        private static string GetEventHubName(string hostname)
+            => hostname.Split('.')[0];
 
         public ValueTask DisposeAsync()
-        {
-            return new ValueTask();
-        }
+            => _events.DisposeAsync();
 
         public IDisposable Subscribe(IObserver<Item> observer)
-        {
-            return EmptyDisposable.Instance;
-        }
+            => _observable.Subscribe(observer);
     }
 }

@@ -17,10 +17,10 @@ namespace MyCentral.Web.Hubs
         {
             var context = Context.GetHttpContext();
 
-            if (context.Request.Query.TryGetValue("host", out var hostname))
+            if (context.Request.Query.TryGetValue("host", out var hostname)
+                && context.Request.Query.TryGetValue("eventsConnectionString", out var eventsConnectionString))
             {
-                await Groups.AddToGroupAsync(Context.ConnectionId, hostname);
-                _connections.AddHostName(Context.ConnectionId, hostname);
+                _connections.AddConnection(Context.ConnectionId, hostname, eventsConnectionString);
             }
             else
             {
@@ -28,12 +28,11 @@ namespace MyCentral.Web.Hubs
             }
         }
 
-        public override async Task OnDisconnectedAsync(Exception exception)
+        public override Task OnDisconnectedAsync(Exception exception)
         {
-            if (_connections.TryRemove(Context.ConnectionId, out var hostname))
-            {
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, hostname);
-            }
+            _connections.RemoveConnection(Context.ConnectionId);
+
+            return Task.CompletedTask;
         }
 
         public async Task SendMessage(string user, string message)
