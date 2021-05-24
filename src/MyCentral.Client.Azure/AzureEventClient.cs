@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Azure.Messaging.EventHubs.Consumer;
+﻿using Azure.Messaging.EventHubs.Consumer;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

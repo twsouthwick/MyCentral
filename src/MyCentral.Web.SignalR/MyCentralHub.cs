@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace MyCentral.Web.Hubs
 {
-    public class IoTEventHub : Hub
+    public class MyCentralHub : Hub
     {
         private readonly EventHubConnections _connections;
 
-        public IoTEventHub(EventHubConnections connections)
+        public MyCentralHub(EventHubConnections connections)
         {
             _connections = connections;
         }

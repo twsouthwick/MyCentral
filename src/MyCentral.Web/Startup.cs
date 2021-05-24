@@ -1,6 +1,5 @@
 using Azure.Core;
 using Azure.Identity;
-using MyCentral.Web.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
