@@ -8,18 +8,19 @@ using System.Threading.Tasks;
 
 namespace MyCentral.Client.Azure
 {
-    public class AzureServiceClient : IAsyncDisposable, IServiceClient, IObservable<Item>
+    public class AzureServiceClient : IAsyncDisposable, IServiceClient
     {
         private readonly ServiceClient _client;
         private readonly RegistryManager _registry;
 
         public string HostName { get; }
 
-        public IObservable<Item> Events => this;
+        public IEventClient Events { get; }
 
-        public AzureServiceClient(string name, ServiceClient client, RegistryManager registry)
+        public AzureServiceClient(string name, ServiceClient client, RegistryManager registry, IEventClient events)
         {
             HostName = name;
+            Events = events;
             _client = client;
             _registry = registry;
         }
@@ -52,8 +53,5 @@ namespace MyCentral.Client.Azure
                 }
             }
         }
-
-        IDisposable IObservable<Item>.Subscribe(IObserver<Item> observer)
-            => EmptyDisposable.Instance;
     }
 }

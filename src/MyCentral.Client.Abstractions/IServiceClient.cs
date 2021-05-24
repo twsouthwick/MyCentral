@@ -6,6 +6,6 @@ namespace MyCentral.Client
     {
         string HostName { get; }
 
-        IObservable<Item> Events { get; }
+        IEventClient Events { get; }
     }
 }

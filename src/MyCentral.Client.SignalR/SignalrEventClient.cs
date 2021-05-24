@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyCentral.Client.SignalR
 {
-    public class SignalrEventClient : IAsyncDisposable, IObservable<Item>
+    public class SignalrEventClient : IEventClient
     {
         private readonly HubConnection _hubConnection;
         private readonly Subject<Item> _subject;

@@ -16,6 +16,7 @@ namespace MyCentral.Client.Azure
             => new AzureServiceClient(
                 name,
                 ServiceClient.Create(name, _credential),
-                RegistryManager.Create(name, _credential));
+                RegistryManager.Create(name, _credential),
+                new AzureEventClient(name, _credential));
     }
 }
