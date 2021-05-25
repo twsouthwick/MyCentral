@@ -8,13 +8,13 @@ namespace MyCentral.Client.Azure
     public class AzureEventClient : IEventClient
     {
         private readonly EventHubConsumerClient _events;
-        private readonly IObservable<Item> _observable;
+        private readonly IObservable<Event> _observable;
 
         public AzureEventClient(string eventConnectionString)
         {
             _events = new EventHubConsumerClient(EventHubConsumerClient.DefaultConsumerGroupName, eventConnectionString);
             _observable = _events.ReadEventsAsync()
-                .Select(t => new Item(t.Data.PartitionKey, t.Data.SequenceNumber.ToString()))
+                .Select(t => new Event(t.Data.EnqueuedTime, t.Data.Properties, t.Data.SystemProperties))
                 .ToObservable();
         }
 
@@ -24,7 +24,7 @@ namespace MyCentral.Client.Azure
         public ValueTask DisposeAsync()
             => _events.DisposeAsync();
 
-        public IDisposable Subscribe(IObserver<Item> observer)
+        public IDisposable Subscribe(IObserver<Event> observer)
             => _observable.Subscribe(observer);
     }
 }

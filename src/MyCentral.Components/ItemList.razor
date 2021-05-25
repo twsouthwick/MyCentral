@@ -1,6 +1,6 @@
 ﻿@using System.Collections.Immutable;
 
-@inherits BlazorObserver<Item>
+@inherits BlazorObserver<Event>
 
 @{
     var list = _list;
@@ -16,16 +16,40 @@
         <ul>
             @foreach (var item in list)
             {
-                <li>@item.User : @item.Message</li>
+                <li>
+                    @item.EnqueuedTime
+                    <ul>
+                        <li>
+                            System Properties
+                            <ul>
+                                @foreach (var property in item.SystemProperties)
+                                {
+                                    <li>@property.Key: @property.Value</li>
+                                }
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            Properties
+                            <ul>
+                                @foreach (var property in item.Properties)
+                                {
+                                    <li>@property.Key: @property.Value</li>
+                                }
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
             }
         </ul>
     }
 </div>
 
 @code {
-    private ImmutableList<Item> _list = ImmutableList<Item>.Empty;
+    private ImmutableList<Event> _list = ImmutableList<Event>.Empty;
 
-    public override void OnNext(Item value)
+    public override void OnNext(Event value)
     {
         System.Threading.Interlocked.Exchange(ref _list, _list.Add(value));
         StateHasChanged();

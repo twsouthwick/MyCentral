@@ -2,7 +2,7 @@
 
 namespace MyCentral.Client
 {
-    public interface IEventClient : IObservable<Item>, IAsyncDisposable
+    public interface IEventClient : IObservable<Event>, IAsyncDisposable
     {
     }
 }

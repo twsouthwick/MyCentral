@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace MyCentral.Web.Hubs
 {
-    public class EventHubBackgroundService : BackgroundService, IObserver<Item>
+    public class EventHubBackgroundService : BackgroundService
     {
         private readonly Dictionary<string, string> _connectionHostnameMapping = new();
         private readonly Dictionary<string, (IServiceClient, IDisposable)> _events = new();
@@ -30,20 +30,6 @@ namespace MyCentral.Web.Hubs
             EventHubConnections = events;
             _hubContext = hubContext;
             _logger = logger;
-        }
-
-        public void OnCompleted()
-        {
-        }
-
-        public void OnError(Exception error)
-        {
-        }
-
-        public async void OnNext(Item value)
-        {
-            _logger.LogInformation("[{host}] Received data", "asdf");
-            await _hubContext.Clients.All.SendAsync("ReceiveMessage", value.User, value.Message);
         }
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -80,7 +66,7 @@ namespace MyCentral.Web.Hubs
             if (!_events.ContainsKey(normalized))
             {
                 var serviceClient = _serviceClientFactory.CreateClient(hostname, eventConnectionString);
-                var disposable = serviceClient.Events.Subscribe(this);
+                var disposable = serviceClient.Events.Subscribe(new HubObserver(normalized, _hubContext, _logger));
 
                 _events.Add(normalized, (serviceClient, disposable));
             }
@@ -92,6 +78,34 @@ namespace MyCentral.Web.Hubs
             {
                 _logger.LogInformation("[{host}] Adding connection {ConnectionId}", host, connectionId);
                 await _hubContext.Groups.RemoveFromGroupAsync(connectionId, host, token);
+            }
+        }
+
+        private class HubObserver : IObserver<Event>
+        {
+            private readonly string _name;
+            private readonly IHubContext<MyCentralHub> _hubContext;
+            private readonly ILogger _logger;
+
+            public HubObserver(string name, IHubContext<MyCentralHub> hubContext, ILogger logger)
+            {
+                _name = name;
+                _hubContext = hubContext;
+                _logger = logger;
+            }
+
+            public void OnCompleted()
+            {
+            }
+
+            public void OnError(Exception error)
+            {
+            }
+
+            public async void OnNext(Event value)
+            {
+                _logger.LogInformation("[{host}] Received data", _name);
+                await _hubContext.Clients.Group(_name).SendAsync("ReceiveMessage", value);
             }
         }
     }

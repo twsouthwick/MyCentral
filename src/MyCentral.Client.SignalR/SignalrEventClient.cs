@@ -10,7 +10,7 @@ namespace MyCentral.Client.SignalR
     public class SignalrEventClient : IEventClient
     {
         private readonly HubConnection _hubConnection;
-        private readonly Subject<Item> _subject;
+        private readonly Subject<Event> _subject;
         private readonly Task _started;
 
         public SignalrEventClient(IOptions<EventClientOptions> options, ILoggerProvider loggingProvider, string hostname, string eventConnectionString)
@@ -30,11 +30,11 @@ namespace MyCentral.Client.SignalR
                 .WithAutomaticReconnect()
                 .Build();
 
-            _subject = new Subject<Item>();
+            _subject = new Subject<Event>();
 
-            _hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+            _hubConnection.On<Event>("ReceiveMessage", @event =>
             {
-                _subject.OnNext(new Item(user, message));
+                _subject.OnNext(@event);
             });
 
             _hubConnection.On("Unauthorized", () =>
@@ -62,7 +62,7 @@ namespace MyCentral.Client.SignalR
             _subject.Dispose();
         }
 
-        public IDisposable Subscribe(IObserver<Item> observer)
+        public IDisposable Subscribe(IObserver<Event> observer)
             => _subject.Subscribe(observer);
     }
 }
