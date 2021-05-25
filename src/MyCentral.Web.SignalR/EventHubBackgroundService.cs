@@ -41,7 +41,14 @@ namespace MyCentral.Web.Hubs
                 {
                     if (connection.State == EventState.Connected)
                     {
-                        await AddConnectionAsync(connection.ConnectionId, connection.Host, connection.EventConnectionString, stoppingToken);
+                        if (connection.Host is not null && connection.EventConnectionString is not null)
+                        {
+                            await AddConnectionAsync(connection.ConnectionId, connection.Host, connection.EventConnectionString, stoppingToken);
+                        }
+                        else
+                        {
+                            _logger.LogWarning("Host or event connection string was null");
+                        }
                     }
                     else if (connection.State == EventState.Disconnected)
                     {

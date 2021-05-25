@@ -25,7 +25,7 @@ else if (client is not null)
 @code {
 private string hostname = "samplenetcat.azure-devices.net";
 private string eventConnectionString = "Endpoint=sb://iothub-ns-samplenetc-10876456-04866aa61b.servicebus.windows.net/;SharedAccessKeyName=iothubowner;SharedAccessKey=hdzPWIwfcGEPndWb8CXNRalER7i4eBQQpLQksAaFbzw=;EntityPath=samplenetcat";
-private IServiceClient client;
+private IServiceClient? client;
 
 private bool HasHostName => !string.IsNullOrEmpty(hostname);
 

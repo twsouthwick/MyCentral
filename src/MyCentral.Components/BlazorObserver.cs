@@ -6,9 +6,9 @@ namespace MyCentral.Components
     public class BlazorObserver<TItem> : ComponentBase, IDisposable, IObserver<TItem>
     {
         [Parameter]
-        public IObservable<TItem> Observable { get; set; }
+        public IObservable<TItem> Observable { get; set; } = null!;
 
-        private IDisposable _disposable;
+        private IDisposable? _disposable;
 
         protected override void OnParametersSet()
         {

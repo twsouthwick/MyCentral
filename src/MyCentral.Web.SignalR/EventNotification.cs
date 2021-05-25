@@ -2,7 +2,8 @@
 {
     public record EventNotification(EventState State, string ConnectionId)
     {
-        public string Host { get; init; }
-        public string EventConnectionString { get; init; }
+        public string? Host { get; init; }
+
+        public string? EventConnectionString { get; init; }
     }
 }

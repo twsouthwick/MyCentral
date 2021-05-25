@@ -5,6 +5,6 @@ namespace MyCentral.Client.SignalR
     public class EventClientOptions
     {
         [Required]
-        public string ServiceEndpoint { get; set; }
+        public string ServiceEndpoint { get; set; } = null!;
     }
 }

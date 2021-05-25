@@ -5,6 +5,7 @@ using System.Collections.Immutable;
 namespace MyCentral.Web.Hubs
 {
     public class ReferenceCountingCollection<TKey> : IEnumerable<TKey>
+         where TKey : notnull
     {
         private ImmutableDictionary<TKey, int> _cache = ImmutableDictionary.Create<TKey, int>();
 

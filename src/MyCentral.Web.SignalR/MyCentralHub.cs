@@ -28,7 +28,7 @@ namespace MyCentral.Web.Hubs
             }
         }
 
-        public override Task OnDisconnectedAsync(Exception exception)
+        public override Task OnDisconnectedAsync(Exception? exception)
         {
             _connections.RemoveConnection(Context.ConnectionId);
 
