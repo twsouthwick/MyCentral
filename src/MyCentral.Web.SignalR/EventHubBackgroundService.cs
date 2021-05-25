@@ -12,8 +12,7 @@ namespace MyCentral.Web.Hubs
 {
     public class EventHubBackgroundService : BackgroundService
     {
-        private readonly Dictionary<string, string> _connectionHostnameMapping = new();
-        private readonly Dictionary<string, (IServiceClient, IDisposable)> _events = new();
+        private readonly Dictionary<string, HubObserver> _connectionHostnameMapping = new();
 
         private readonly IServiceClientFactory _serviceClientFactory;
         private readonly EventHubConnections EventHubConnections;
@@ -62,43 +61,63 @@ namespace MyCentral.Web.Hubs
             }
         }
 
-        private async Task AddConnectionAsync(string connectionId, string hostname, string eventConnectionString, CancellationToken token)
+        private Task AddConnectionAsync(string connectionId, string hostname, string eventConnectionString, CancellationToken token)
         {
             var normalized = hostname.ToLowerInvariant();
 
             _logger.LogInformation("[{host}] Adding connection {ConnectionId}", normalized, connectionId);
-            _connectionHostnameMapping.Add(connectionId, normalized);
-            await _hubContext.Groups.AddToGroupAsync(connectionId, normalized, token);
+            var serviceClient = _serviceClientFactory.CreateClient(hostname, eventConnectionString);
+            var connection = new HubObserver(connectionId, serviceClient, _hubContext, _logger);
+            _connectionHostnameMapping.Add(connectionId, connection);
 
-            if (!_events.ContainsKey(normalized))
-            {
-                var serviceClient = _serviceClientFactory.CreateClient(hostname, eventConnectionString);
-                var disposable = serviceClient.Events.Subscribe(new HubObserver(normalized, _hubContext, _logger));
-
-                _events.Add(normalized, (serviceClient, disposable));
-            }
+            return Task.CompletedTask;
         }
 
         private async Task RemoveConnectionAsync(string connectionId, CancellationToken token)
         {
             if (_connectionHostnameMapping.TryGetValue(connectionId, out var host))
             {
-                _logger.LogInformation("[{host}] Adding connection {ConnectionId}", host, connectionId);
-                await _hubContext.Groups.RemoveFromGroupAsync(connectionId, host, token);
+                _logger.LogInformation("[{host}] Removing connection {ConnectionId}", host.HostName, connectionId);
+                await host.DisposeAsync();
             }
         }
 
-        private class HubObserver : IObserver<Event>
+        private sealed record ConnectionData(IServiceClient Client, IDisposable Subscription) : IAsyncDisposable
         {
-            private readonly string _name;
+            public async ValueTask DisposeAsync()
+            {
+                Subscription.Dispose();
+                await Client.DisposeAsync();
+            }
+        }
+
+        private class HubObserver : IObserver<Event>, IAsyncDisposable
+        {
+            private readonly string _connectionId;
+            private readonly IServiceClient _client;
+            private readonly IDisposable _subscription;
             private readonly IHubContext<MyCentralHub> _hubContext;
             private readonly ILogger _logger;
 
-            public HubObserver(string name, IHubContext<MyCentralHub> hubContext, ILogger logger)
+            public HubObserver(
+                string connectionId,
+                IServiceClient client,
+                IHubContext<MyCentralHub> hubContext,
+                ILogger logger)
             {
-                _name = name;
+                _connectionId = connectionId;
+                _client = client;
+                _subscription = _client.Events.Subscribe(this);
                 _hubContext = hubContext;
                 _logger = logger;
+            }
+
+            public string HostName => _client.HostName;
+
+            public ValueTask DisposeAsync()
+            {
+                _subscription.Dispose();
+                return _client.DisposeAsync();
             }
 
             public void OnCompleted()
@@ -111,8 +130,8 @@ namespace MyCentral.Web.Hubs
 
             public async void OnNext(Event value)
             {
-                _logger.LogInformation("[{host}] Received data", _name);
-                await _hubContext.Clients.Group(_name).SendAsync("ReceiveMessage", value);
+                _logger.LogInformation("[{host}] Received data", _client.HostName);
+                await _hubContext.Clients.Client(_connectionId).SendAsync("ReceiveMessage", value);
             }
         }
     }
