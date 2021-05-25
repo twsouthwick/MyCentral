@@ -1,3 +1,4 @@
+using BlazorApplicationInsights;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,8 @@ namespace MyCentral.Browser
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
+
+            builder.Services.AddBlazorApplicationInsights();
 
             builder.Services.AddHttpClient("DeviceService.ServerAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress));
                 //.AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
