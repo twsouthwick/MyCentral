@@ -23,23 +23,22 @@
                     @deviceId
                 </div>
 
-                <div class="card-body">
-
-                    <h5 class="card-title">Events</h5>
-
-                    <table class="table">
+                <table class="table">
+                    <tr>
+                        <th scope="col">Time</th>
+                        <th scope="col">Body</th>
+                    </tr>
+                    @foreach (var item in events)
+                    {
                         <tr>
-                            <th scope="col">Time</th>
-                            <th scope="col">Body</th>
+                            <td>@item.EnqueuedTime</td>
+                            <td>@item.Body</td>
                         </tr>
-                        @foreach (var item in events)
-                        {
-                            <tr>
-                                <td>@item.EnqueuedTime</td>
-                                <td>@item.Body</td>
-                            </tr>
-                        }
-                    </table>
+                    }
+                </table>
+
+                <div class="card-body">
+                    <a href="#" class="card-link" @onclick="() => Clear(deviceId)">Clear</a>
                 </div>
             </div>
         }
@@ -52,6 +51,12 @@
     public override void OnNext(Event value)
     {
         ImmutableInterlocked.AddOrUpdate(ref _list, value.DeviceId, key => ImmutableList.Create<Event>(value), (key, existing) => existing.Insert(0, value));
+        StateHasChanged();
+    }
+
+    private void Clear(string deviceId)
+    {
+        ImmutableInterlocked.AddOrUpdate(ref _list, deviceId, key => ImmutableList<Event>.Empty, (key, existing) => ImmutableList<Event>.Empty);
         StateHasChanged();
     }
 }
