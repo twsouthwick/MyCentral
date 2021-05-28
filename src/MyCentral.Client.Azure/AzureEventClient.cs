@@ -14,7 +14,7 @@ namespace MyCentral.Client.Azure
         {
             _events = new EventHubConsumerClient(EventHubConsumerClient.DefaultConsumerGroupName, eventConnectionString);
             _observable = _events.ReadEventsAsync()
-                .Select(t => new Event(t.Data.EnqueuedTime, t.Data.Properties, t.Data.SystemProperties))
+                .Select(t => new Event(t.Data.EnqueuedTime, t.Data.EventBody.ToString(), t.Data.Properties, t.Data.SystemProperties))
                 .ToObservable();
         }
 

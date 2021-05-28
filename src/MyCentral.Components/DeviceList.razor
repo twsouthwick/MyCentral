@@ -1,11 +1,9 @@
 ﻿@inject IServiceClientFactory ClientFactory
 @implements IAsyncDisposable
 
-<input @bind="hostname" />
+@*<input @bind="hostname" />
 <input @bind="eventConnectionString" />
-<button @onclick="UpdateHost">Update</button>
-
-<p>This component demonstrates fetching data from the server.</p>
+<button @onclick="UpdateHost">Update</button>*@
 
 @if (hostname is null)
 {

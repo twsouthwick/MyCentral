@@ -9,40 +9,25 @@
 <div>
     @if (list.IsEmpty)
     {
-        <p>No content</p>
+        <div class="alert alert-warning">
+            Initializing...
+        </div>
     }
     else
     {
-        <ul>
+        <table class="table">
+            <tr>
+                <th scope="col">Time</th>
+                <th scope="col">Body</th>
+            </tr>
             @foreach (var item in list)
             {
-                <li>
-                    @item.EnqueuedTime
-                    <ul>
-                        <li>
-                            System Properties
-                            <ul>
-                                @foreach (var property in item.SystemProperties)
-                                {
-                                    <li>@property.Key: @property.Value</li>
-                                }
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            Properties
-                            <ul>
-                                @foreach (var property in item.Properties)
-                                {
-                                    <li>@property.Key: @property.Value</li>
-                                }
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
+                <tr>
+                    <td>@item.EnqueuedTime</td>
+                    <td>@item.Body</td>
+                </tr>
             }
-        </ul>
+        </table>
     }
 </div>
 
@@ -51,7 +36,7 @@
 
     public override void OnNext(Event value)
     {
-        System.Threading.Interlocked.Exchange(ref _list, _list.Add(value));
+        System.Threading.Interlocked.Exchange(ref _list, _list.Insert(0, value));
         StateHasChanged();
     }
 }
