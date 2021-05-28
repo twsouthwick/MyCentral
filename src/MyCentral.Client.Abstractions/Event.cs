@@ -3,5 +3,10 @@ using System.Collections.Generic;
 
 namespace MyCentral.Client
 {
-    public record Event(DateTimeOffset EnqueuedTime, string Body, IEnumerable<KeyValuePair<string, object>> Properties, IEnumerable<KeyValuePair<string, object>> SystemProperties);
+    public record Event(
+        string DeviceId,
+        DateTimeOffset EnqueuedTime,
+        string Body,
+        IEnumerable<KeyValuePair<string, object>> Properties,
+        IEnumerable<KeyValuePair<string, object>> SystemProperties);
 }
