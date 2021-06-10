@@ -13,12 +13,11 @@ namespace MyCentral.Client.SignalR
         private readonly Subject<Event> _subject;
         private readonly Task _started;
 
-        public SignalrEventClient(IOptions<EventClientOptions> options, ILoggerProvider loggingProvider, string hostname, string eventConnectionString)
+        public SignalrEventClient(IOptions<EventClientOptions> options, ILoggerProvider loggingProvider)
         {
             var url = new UriBuilder(options.Value.ServiceEndpoint)
             {
                 Path = "events",
-                Query = $"host={hostname}&eventsConnectionString={eventConnectionString}",
             }.Uri;
 
             _hubConnection = new HubConnectionBuilder()

@@ -8,8 +8,8 @@ namespace MyCentral.Client
     {
         public static void AddSignalRMyCentral(this IServiceCollection services, Action<EventClientOptions> configure)
         {
-            services.AddSingleton<SignalrEventClientFactory>();
-            services.AddSingleton<IServiceClientFactory, ServiceClientFactory>();
+            services.AddSingleton<IEventClient, SignalrEventClient>();
+            services.AddSingleton<IServiceClient, SignalrServiceClient>();
             services.AddOptions<EventClientOptions>()
                 .Configure(configure);
         }

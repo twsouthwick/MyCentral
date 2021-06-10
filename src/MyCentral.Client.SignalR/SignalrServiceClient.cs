@@ -5,15 +5,14 @@ namespace MyCentral.Client.SignalR
 {
     public class SignalrServiceClient : IServiceClient, IAsyncDisposable
     {
-        public SignalrServiceClient(string hostname, IEventClient eventClient)
+        public SignalrServiceClient(IEventClient eventClient)
         {
-            HostName = hostname;
             Events = eventClient;
         }
 
         public IEventClient Events { get; }
 
-        public string HostName { get; }
+        public string HostName { get; } = string.Empty;
 
         public ValueTask DisposeAsync()
         {

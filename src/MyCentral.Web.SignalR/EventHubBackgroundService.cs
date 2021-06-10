@@ -14,18 +14,18 @@ namespace MyCentral.Web.Hubs
     {
         private readonly Dictionary<string, HubObserver> _connectionHostnameMapping = new();
 
-        private readonly IServiceClientFactory _serviceClientFactory;
+        private readonly IServiceClient _serviceClient;
         private readonly EventHubConnections EventHubConnections;
         private readonly IHubContext<MyCentralHub> _hubContext;
         private readonly ILogger<EventHubBackgroundService> _logger;
 
         public EventHubBackgroundService(
-            IServiceClientFactory serviceClientFactory,
+            IServiceClient serviceClient,
             EventHubConnections events,
             IHubContext<MyCentralHub> hubContext,
             ILogger<EventHubBackgroundService> logger)
         {
-            _serviceClientFactory = serviceClientFactory;
+            _serviceClient = serviceClient;
             EventHubConnections = events;
             _hubContext = hubContext;
             _logger = logger;
@@ -40,14 +40,7 @@ namespace MyCentral.Web.Hubs
                 {
                     if (connection.State == EventState.Connected)
                     {
-                        if (connection.Host is not null && connection.EventConnectionString is not null)
-                        {
-                            await AddConnectionAsync(connection.ConnectionId, connection.Host, connection.EventConnectionString, stoppingToken);
-                        }
-                        else
-                        {
-                            _logger.LogWarning("Host or event connection string was null");
-                        }
+                        AddConnection(connection.ConnectionId);
                     }
                     else if (connection.State == EventState.Disconnected)
                     {
@@ -61,16 +54,11 @@ namespace MyCentral.Web.Hubs
             }
         }
 
-        private Task AddConnectionAsync(string connectionId, string hostname, string eventConnectionString, CancellationToken token)
+        private void AddConnection(string connectionId)
         {
-            var normalized = hostname.ToLowerInvariant();
-
-            _logger.LogInformation("[{host}] Adding connection {ConnectionId}", normalized, connectionId);
-            var serviceClient = _serviceClientFactory.CreateClient(hostname, eventConnectionString);
-            var connection = new HubObserver(connectionId, serviceClient, _hubContext, _logger);
+            _logger.LogInformation("Adding connection {ConnectionId}", connectionId);
+            var connection = new HubObserver(connectionId, _serviceClient, _hubContext, _logger);
             _connectionHostnameMapping.Add(connectionId, connection);
-
-            return Task.CompletedTask;
         }
 
         private async Task RemoveConnectionAsync(string connectionId, CancellationToken token)
@@ -130,7 +118,7 @@ namespace MyCentral.Web.Hubs
 
             public async void OnNext(Event value)
             {
-                _logger.LogInformation("[{host}] Received data", _client.HostName);
+                _logger.LogTrace("[{host}] Received data", _client.HostName);
                 await _hubContext.Clients.Client(_connectionId).SendAsync("ReceiveMessage", value);
             }
         }

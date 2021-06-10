@@ -13,19 +13,11 @@ namespace MyCentral.Web.Hubs
             _connections = connections;
         }
 
-        public override async Task OnConnectedAsync()
+        public override Task OnConnectedAsync()
         {
-            var context = Context.GetHttpContext();
+            _connections.AddConnection(Context.ConnectionId);
 
-            if (context.Request.Query.TryGetValue("host", out var hostname)
-                && context.Request.Query.TryGetValue("eventsConnectionString", out var eventsConnectionString))
-            {
-                _connections.AddConnection(Context.ConnectionId, hostname, eventsConnectionString);
-            }
-            else
-            {
-                await Clients.Clients(Context.ConnectionId).SendAsync("UnknownHostName");
-            }
+            return Task.CompletedTask;
         }
 
         public override Task OnDisconnectedAsync(Exception? exception)

@@ -7,13 +7,9 @@ namespace MyCentral.Web.Hubs
     {
         private readonly Subject<EventNotification> _subject = new();
 
-        public void AddConnection(string id, string hostname, string eventConnectionString)
+        public void AddConnection(string id)
         {
-            _subject.OnNext(new EventNotification(EventState.Connected, id)
-            {
-                Host = hostname,
-                EventConnectionString = eventConnectionString
-            });
+            _subject.OnNext(new EventNotification(EventState.Connected, id));
         }
 
         public void Dispose()

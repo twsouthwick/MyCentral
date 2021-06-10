@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
 using MyCentral.Client.Azure;
+using System;
 using System.Linq;
 
 namespace MyCentral.Web
@@ -32,7 +33,7 @@ namespace MyCentral.Web
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddSingleton<TokenCredential, DefaultAzureCredential>();
-            services.AddAzureMyCentral();
+            services.AddAzureMyCentral(options => Configuration.GetSection("IoTHub").Bind(options));
             services.AddMyCentralSignalRService();
             services.AddResponseCompression(opts =>
             {

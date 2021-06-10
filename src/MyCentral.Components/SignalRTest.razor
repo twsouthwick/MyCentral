@@ -1,6 +1,3 @@
-﻿<ItemList Observable="@Client.Events" />
+﻿@inject IServiceClient Client
 
-@code {
-    [CascadingParameter]
-    protected IServiceClient Client { get; set; } = null!;
-}
+<ItemList Observable="@Client.Events" />
