@@ -13,13 +13,5 @@ namespace MyCentral.Client.Azure
             services.AddOptions<IoTHubOptions>()
                 .Configure(configure);
         }
-
-        public static void AddDeviceEmulation(this IServiceCollection services, Action<DeviceCollection> configure)
-        {
-            services.AddHostedService<DeviceEmulator>();
-            services.AddSingleton<DeviceManager>();
-            services.AddOptions<DeviceCollection>()
-                .Configure(configure);
-        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
+using MyCentral.Client;
 
-namespace MyCentral.Client.Azure
+namespace MyCentral.Device.Emulation
 {
     public class DeviceManager
     {

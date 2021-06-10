@@ -14,6 +14,7 @@
     <ProjectReference Include="..\MyCentral.Client.Azure\MyCentral.Client.Azure.csproj" />
     <ProjectReference Include="..\MyCentral.Browser\MyCentral.Browser.csproj" />
     <ProjectReference Include="..\MyCentral.Client.Abstractions\MyCentral.Client.Abstractions.csproj" />
+    <ProjectReference Include="..\MyCentral.Device.Emulation\MyCentral.Device.Emulation.csproj" />
     <ProjectReference Include="..\MyCentral.Web.SignalR\MyCentral.Web.SignalR.csproj" />
   </ItemGroup>
   <ItemGroup>
