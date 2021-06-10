@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace MyCentral.Client.Azure
 {
@@ -9,6 +11,14 @@ namespace MyCentral.Client.Azure
         {
             services.AddSingleton<IServiceClient, AzureServiceClient>();
             services.AddOptions<IoTHubOptions>()
+                .Configure(configure);
+        }
+
+        public static void AddDeviceEmulation(this IServiceCollection services, Action<DeviceCollection> configure)
+        {
+            services.AddHostedService<DeviceEmulator>();
+            services.AddSingleton<DeviceManager>();
+            services.AddOptions<DeviceCollection>()
                 .Configure(configure);
         }
     }

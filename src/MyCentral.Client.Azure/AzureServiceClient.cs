@@ -15,14 +15,16 @@ namespace MyCentral.Client.Azure
         private readonly ServiceClient _client;
         private readonly RegistryManager _registry;
         private readonly IoTHubOptions _options;
+        private readonly DeviceCollection _devices;
 
         public string HostName => _options.HostName;
 
         public IEventClient Events { get; }
 
-        public AzureServiceClient(IOptions<IoTHubOptions> options, TokenCredential credential)
+        public AzureServiceClient(IOptions<IoTHubOptions> options, IOptions<DeviceCollection> devices, TokenCredential credential)
         {
             _options = options.Value;
+            _devices = devices.Value;
 
             Events = new AzureEventClient(_options.EventHubConnectionString);
             _client = ServiceClient.Create(_options.HostName, credential);
@@ -57,5 +59,7 @@ namespace MyCentral.Client.Azure
                 }
             }
         }
+
+        Task<DeviceCollection> IServiceClient.GetDevicesAsync(CancellationToken token) => Task.FromResult(_devices);
     }
 }

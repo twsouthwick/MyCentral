@@ -35,6 +35,7 @@ namespace MyCentral.Web
             services.AddSingleton<TokenCredential, DefaultAzureCredential>();
             services.AddAzureMyCentral(options => Configuration.GetSection("IoTHub").Bind(options));
             services.AddMyCentralSignalRService();
+            services.AddDeviceEmulation(options => Configuration.GetSection("IoT").Bind(options));
             services.AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
