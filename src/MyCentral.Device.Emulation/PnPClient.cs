@@ -3,6 +3,7 @@ using Microsoft.Azure.Devices.Shared;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,8 +31,12 @@ namespace MyCentral.Device.Emulation
             await deviceClient.SendEventAsync(message);
         }
 
-        public Task SendAsync<T>(string componentName, T value)
-            => SendComponentTelemetryValueAsync(componentName, JsonConvert.SerializeObject(value));
+        public async Task SendAsync(string componentName, Stream stream)
+        {
+            using var reader = new StreamReader(stream);
+            var content = await reader.ReadToEndAsync();
+            await SendComponentTelemetryValueAsync(componentName, content);
+        }
 
         public async Task SendComponentTelemetryValueAsync(string componentName, string serializedTelemetry)
         {
@@ -144,5 +149,8 @@ namespace MyCentral.Device.Emulation
             await deviceClient.CloseAsync();
             deviceClient.Dispose();
         }
+
+        public Task SendAsync(string componentName, string content)
+            => SendComponentTelemetryValueAsync(componentName, content);
     }
 }

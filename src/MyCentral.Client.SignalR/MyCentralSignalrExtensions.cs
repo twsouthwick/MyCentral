@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MyCentral.Client.SignalR;
+using MyCentral.Device.Emulation;
 using System;
 
 namespace MyCentral.Client
@@ -10,6 +11,7 @@ namespace MyCentral.Client
         {
             services.AddScoped<IEventClient, SignalrEventClient>();
             services.AddScoped<IServiceClient, SignalrServiceClient>();
+            services.AddScoped<IEmulatedDeviceManager, ClientEmulatedDeviceManager>();
             services.AddOptions<EventClientOptions>()
                 .Configure(configure);
         }

@@ -24,8 +24,8 @@ namespace MyCentral.Device.Emulation
             await client.ReportComponentPropertyAsync("deviceInfo", "manufacturer", "rido");
             var manufacturer = await client.ReadReportedComponentPropertyAsync<string>("deviceInfo", "manufacturer");
 
-            await client.SendAsync("themorstat1", new { temperature = 11 });
-            await client.SendAsync("themorstat2", new { temperature = 22 });
+            //await client.SendAsync("themorstat1", new { temperature = 11 });
+            //await client.SendAsync("themorstat2", new { temperature = 22 });
 
             client.SetDesiredPropertyUpdateCommandHandler("thermostat1", async (twin) =>
             {

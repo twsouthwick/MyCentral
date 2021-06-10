@@ -1,5 +1,6 @@
 using Microsoft.JSInterop;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace MyCentral.Components

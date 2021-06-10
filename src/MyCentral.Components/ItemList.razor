@@ -3,60 +3,62 @@
 @inherits BlazorObserver<Event>
 
 @{
-    var list = _list;
+	var list = _list;
 }
 
 <div>
-    @if (list.IsEmpty)
-    {
-        <div class="alert alert-warning">
-            Initializing...
-        </div>
-    }
-    else
-    {
-        @foreach (var (deviceId, events) in list.OrderBy(l => l.Key))
-        {
-            <div class="card">
+	@if (list.IsEmpty)
+	{
+	 <div class="alert alert-warning">
+	  Initializing...
+	 </div>
+	}
+	else
+	{
+		@foreach (var (deviceId, events) in list.OrderBy(l => l.Key))
+		{
+		 <DataPost Name="@deviceId" />
 
-                <div class="card-header">
-                    @deviceId
-                </div>
+		 <div class="card">
 
-                <table class="table">
-                    <tr>
-                        <th scope="col">Time</th>
-                        <th scope="col">Body</th>
-                    </tr>
-                    @foreach (var item in events)
-                    {
-                        <tr>
-                            <td>@item.EnqueuedTime</td>
-                            <td>@item.Body</td>
-                        </tr>
-                    }
-                </table>
+		  <div class="card-header">
+					@deviceId
+		  </div>
 
-                <div class="card-body">
-                    <a href="#" class="card-link" @onclick="() => Clear(deviceId)">Clear</a>
-                </div>
-            </div>
-        }
-    }
+		  <table class="table">
+		   <tr>
+			<th scope="col">Time</th>
+			<th scope="col">Body</th>
+		   </tr>
+					@foreach (var item in events)
+					{
+			   <tr>
+				<td>@item.EnqueuedTime</td>
+				<td>@item.Body</td>
+			   </tr>
+					}
+		  </table>
+
+		  <div class="card-body">
+		   <a href="#" class="card-link" @onclick="() => Clear(deviceId)">Clear</a>
+		  </div>
+		 </div>
+		}
+	}
 </div>
 
 @code {
-    private ImmutableDictionary<string, ImmutableList<Event>> _list = ImmutableDictionary<string, ImmutableList<Event>>.Empty;
+	private ImmutableDictionary<string, ImmutableList<Event>> _list = ImmutableDictionary<string, ImmutableList<Event>>.Empty;
 
-    public override void OnNext(Event value)
-    {
-        ImmutableInterlocked.AddOrUpdate(ref _list, value.DeviceId, key => ImmutableList.Create<Event>(value), (key, existing) => existing.Insert(0, value));
-        StateHasChanged();
-    }
+	public override void OnNext(Event value)
+	{
+		ImmutableInterlocked.AddOrUpdate(ref _list, value.DeviceId, key => ImmutableList.Create<Event>(value), (key, existing) => existing.Insert(0, value));
+		StateHasChanged();
+	}
 
-    private void Clear(string deviceId)
-    {
-        ImmutableInterlocked.AddOrUpdate(ref _list, deviceId, key => ImmutableList<Event>.Empty, (key, existing) => ImmutableList<Event>.Empty);
-        StateHasChanged();
-    }
+	private void Clear(string deviceId)
+	{
+		ImmutableInterlocked.AddOrUpdate(ref _list, deviceId, key => ImmutableList<Event>.Empty, (key, existing) => ImmutableList<Event>.Empty);
+		StateHasChanged();
+	}
 }
