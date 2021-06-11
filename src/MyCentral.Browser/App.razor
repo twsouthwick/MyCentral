@@ -1,6 +1,6 @@
 <ApplicationInsightsComponent />
 <CascadingAuthenticationState>
-	<Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true" AdditionalAssemblies="new[] { typeof(SignalRTest).Assembly }">
+	<Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true" AdditionalAssemblies="new[] { typeof(MyCentral.Components.Pages.Device).Assembly }">
 		<Found Context="routeData">
 			<AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
 				<NotAuthorized>
@@ -9,8 +9,8 @@
 							<RedirectToLogin />
 						}
 						else
-						{ 
-							<p>You are not authorized to access this resource.</p> 
+						{
+							<p>You are not authorized to access this resource.</p>
 						}
 				</NotAuthorized>
 			</AuthorizeRouteView>

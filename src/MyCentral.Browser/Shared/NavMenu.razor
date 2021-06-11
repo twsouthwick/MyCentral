@@ -1,4 +1,5 @@
 ﻿@inject IServiceClient Client
+@implements IDisposable
 
 <div class="top-row pl-4 navbar navbar-dark">
 	<a class="navbar-brand" href="">MyCentral</a>
@@ -14,16 +15,15 @@
 				<span class="oi oi-home" aria-hidden="true"></span> Home
 			</NavLink>
 		</li>
-
-		@if (_devices is not null)
-		{
-			foreach (var device in _devices.Devices)
+		@if(_devices is not null)
+        {
+			@foreach (var device in _devices.OrderBy(d=>d))
 			{
-				var url = $"device/{@device.Name}"; 
+				var url = $"device/{@device}";
 
 				<li class="nav-item px-3">
 					<NavLink class="nav-link" href="@url" Match="NavLinkMatch.All">
-						<span class="oi oi-laptop" aria-hidden="true"></span> @device.Name
+						<span class="oi oi-laptop" aria-hidden="true"></span> @device
 					</NavLink>
 				</li>
 			}
@@ -32,18 +32,23 @@
 </div>
 
 @code {
-	private bool collapseNavMenu = true;
-	private DeviceCollection? _devices;
+    private bool collapseNavMenu = true;
+    private ObservableList<string>? _devices;
 
-	private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
-	protected override async Task OnInitializedAsync()
-	{
-		_devices = await Client.GetDevicesAsync(default);
-	}
+    protected override void OnInitialized()
+    {
+        _devices = new ObservableList<string>( Client.ObserveDeviceNames(), StateHasChanged);
+    }
 
-	private void ToggleNavMenu()
-	{
-		collapseNavMenu = !collapseNavMenu;
-	}
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    public void Dispose()
+    {
+        _devices?.Dispose();
+    }
 }

@@ -26,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCentral.Components", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCentral.Web.SignalR", "src\MyCentral.Web.SignalR\MyCentral.Web.SignalR.csproj", "{70E1CD44-08B2-42DF-9548-0B062E20E91F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCentral.Device.Emulation", "src\MyCentral.Device.Emulation\MyCentral.Device.Emulation.csproj", "{2722B4E5-7563-48C2-80A0-8F5C921FF39E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCentral.Device.Emulation", "src\MyCentral.Device.Emulation\MyCentral.Device.Emulation.csproj", "{2722B4E5-7563-48C2-80A0-8F5C921FF39E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,8 +1,59 @@
 ﻿@page "/device/{Name}"
 
-<h3>@Name</h3>
+@inject IServiceClient Client
+@implements IDisposable
 
-@code {
-	[Parameter]
-	public string Name { get; set; } = null!;
-}
+<div>
+    <DataPost Name="@Name" />
+
+    <div class="card">
+
+        <div class="card-header">
+            @Name
+        </div>
+
+        @if (_events is null || _events.Count == 0)
+        {
+            <div class="alert alert-warning">
+                No Data
+            </div>
+         }
+        else
+        {
+            <table class="table">
+                <tr>
+                    <th scope="col">Time</th>
+                    <th scope="col">Body</th>
+                </tr>
+
+                @foreach (var item in _events)
+                {
+                    <tr>
+                        <td>@item.EnqueuedTime</td>
+                        <td>@item.Body</td>
+                    </tr>
+                 }
+            </table>
+
+            <div class="card-body">
+                <a href="#" class="card-link" @onclick="() => _events.Clear()">Clear</a>
+            </div>
+            }
+    </div>
+</div>
+
+
+@code { private ObservableList<Event>? _events;
+
+    [Parameter]
+    public string Name { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        _events = new ObservableList<Event>(Client.ObserveEventsFor(Name), StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        _events?.Dispose();
+    } }
