@@ -25,10 +25,6 @@ jobs:
       run: dotnet test -c RELEASE --no-build --verbosity normal
     - name: Publish
       run: dotnet publish -c RELEASE ./src/MyCentral.Web/MyCentral.Web.csproj -o ./publish
-    - uses: actions/upload-artifact@v2
-      with:
-        name: deployment
-        path: publish
     - uses: azure/webapps-deploy@v2
       with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
