@@ -1,15 +1,13 @@
 ﻿using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Shared;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MyCentral.Device.Emulation
 {
     public delegate void OnDesiredPropertyFoundCallback(TwinCollection newValue);
+
     public sealed class PnPClient : IAsyncDisposable, IEmulatedDevice
     {
         private readonly DeviceClient deviceClient;
@@ -21,30 +19,17 @@ namespace MyCentral.Device.Emulation
             deviceClient.SetDesiredPropertyUpdateCallbackAsync(DesiredPropertyUpdateCallback, deviceClient);
         }
 
-        public async Task SendTelemetryValueAsync(string serializedTelemetry)
+        public Task SendAsync(string componentName, byte[] bytes)
         {
-            var message = new Message(Encoding.UTF8.GetBytes(serializedTelemetry))
+            var message = new Message(bytes)
             {
                 ContentType = "application/json",
                 ContentEncoding = "utf-8"
             };
-            await deviceClient.SendEventAsync(message);
-        }
 
-        public async Task SendAsync(string componentName, Stream stream)
-        {
-            using var reader = new StreamReader(stream);
-            var content = await reader.ReadToEndAsync();
-            await SendComponentTelemetryValueAsync(componentName, content);
-        }
-
-        public async Task SendComponentTelemetryValueAsync(string componentName, string serializedTelemetry)
-        {
-            var message = new Message(Encoding.UTF8.GetBytes(serializedTelemetry));
             message.Properties.Add("$.sub", componentName);
-            message.ContentType = "application/json";
-            message.ContentEncoding = "utf-8";
-            await deviceClient.SendEventAsync(message);
+
+            return deviceClient.SendEventAsync(message);
         }
 
         public void SetDesiredPropertyUpdateCommandHandler(string componentName, OnDesiredPropertyFoundCallback callback)
@@ -149,8 +134,5 @@ namespace MyCentral.Device.Emulation
             await deviceClient.CloseAsync();
             deviceClient.Dispose();
         }
-
-        public Task SendAsync(string componentName, string content)
-            => SendComponentTelemetryValueAsync(componentName, content);
     }
 }

@@ -34,20 +34,13 @@ namespace MyCentral.Client
                 _name = name;
             }
 
-            public ValueTask DisposeAsync()
-            {
-                return new ValueTask();
-            }
+            public ValueTask DisposeAsync() => default;
 
-            public Task SendAsync(string componentName, Stream content)
-            {
-                throw new NotImplementedException();
-            }
+            public Task SendAsync(string componentName, byte[] bytes) => SendAsync(componentName, new ByteArrayContent(bytes));
 
-            public Task SendAsync(string componentName, string content)
-            {
-                return _client.PostAsync($"api/devices/{_name}/{componentName}", new StringContent(content));
-            }
+            public Task SendAsync(string componentName, string content) => SendAsync(componentName, new StringContent(content));
+
+            public Task SendAsync(string componentName, HttpContent content) => _client.PostAsync($"api/devices/{_name}/{componentName}", content);
         }
     }
 }
