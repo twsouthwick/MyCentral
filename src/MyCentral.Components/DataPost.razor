@@ -1,41 +1,42 @@
 ﻿@inject IEmulatedDeviceManager EmulatedDevices
 
-<div class="form-group">
-	<label>
-		Component
-		<input class="form-control" @bind-value="@_component" />
-	</label>
+@if (_device is not null)
+{
+	<div class="form-group">
+	 <label>
+	  Component
+	  <input class="form-control" @bind-value="@_component" />
+	 </label>
 
-	<label>
-		Data
-		<input class="form-control" @bind-value="@_text" />
-	</label>
-</div>
+	 <label>
+	  Data
+	  <input class="form-control" @bind-value="@_text" />
+	 </label>
+	</div>
 
-<button class="btn btn-primary" @onclick="Send">Send</button>
-
+	<button class="btn btn-primary" @onclick="Send">Send</button>
+}
 
 @code {
 	private string? _component;
 	private string? _text;
+	private IEmulatedDevice? _device;
 
 	[Parameter]
 	public string Name { get; set; } = null!;
 
+	protected override async Task OnParametersSetAsync()
+	{
+		_device = await EmulatedDevices.GetDeviceAsync(Name, default);
+	}
+
 	private async Task Send()
 	{
-		if (_component is null || _text is null)
+		if (_device is null || _component is null || _text is null)
 		{
 			return;
 		}
 
-		var device = await EmulatedDevices.GetDeviceAsync(Name, default);
-
-		if (device is null)
-		{
-			return;
-		}
-
-		await device.SendAsync(_component, _text);
+		await _device.SendAsync(_component, _text);
 	}
 }
