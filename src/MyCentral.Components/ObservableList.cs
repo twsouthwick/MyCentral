@@ -47,9 +47,6 @@ namespace MyCentral.Components
             _onChange?.Invoke();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
