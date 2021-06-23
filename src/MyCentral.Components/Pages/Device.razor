@@ -1,10 +1,9 @@
-﻿@page "/device/{Name}"
+﻿@page "/device/{DeviceId}"
 
 @inject IServiceClient Client
-@implements IDisposable
 
 <div>
-    <h3>@Name</h3>
+    <h3>@DeviceId</h3>
 
     <div class="card">
 
@@ -12,53 +11,29 @@
             Invoke Method
         </div>
         <div class="card-body">
-            <InvokeCommand DeviceId="@Name" />
+            <InvokeCommand DeviceId="@DeviceId" />
         </div>
     </div>
 
-    <p/>
+    <p />
 
-    @if (_events is not null)
-    {
-        <div class="card">
-            <div class="card-header">
-                Events
-            </div>
-
-            <table class="table">
-                <tr>
-                    <th scope="col">Time</th>
-                    <th scope="col">Body</th>
-                </tr>
-
-                @foreach (var item in _events)
-                {
-                    <tr>
-                        <td>@item.EnqueuedTime</td>
-                        <td>@item.Body</td>
-                    </tr>
-                }
-            </table>
-
-            <div class="card-body">
-                <a href="#" class="card-link" @onclick="() => _events.Clear()">Clear</a>
-            </div>
+    <div class="card">
+        <div class="card-header">
+            Events
         </div>
-    }
+
+        <EventList DeviceId="@DeviceId" @ref="_eventList" />
+
+        <div class="card-body">
+            <a href="#" class="card-link" @onclick="() => _eventList?.Clear()">Clear</a>
+        </div>
+    </div>
 </div>
 
 
-@code { private ObservableList<Event>? _events;
+@code {
+    private EventList? _eventList;
 
     [Parameter]
-    public string Name { get; set; } = null!;
-
-    protected override void OnInitialized()
-    {
-        _events = new ObservableList<Event>(Client.ObserveEventsFor(Name), StateHasChanged);
-    }
-
-    public void Dispose()
-    {
-        _events?.Dispose();
-    } }
+    public string DeviceId { get; set; } = null!;
+}

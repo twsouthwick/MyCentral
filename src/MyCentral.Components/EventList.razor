@@ -1,0 +1,46 @@
+﻿@inject IServiceClient Client
+@implements IDisposable
+
+@if (_events is not null)
+{
+    <table class="table">
+        <tr>
+            <th scope="col">Time</th>
+            <th scope="col">Body</th>
+        </tr>
+
+        @foreach (var item in _events)
+        {
+            <tr>
+                <td>@item.EnqueuedTime</td>
+                <td>@item.Body</td>
+            </tr>
+        }
+    </table>
+}
+
+@code {
+    [Parameter]
+    public string DeviceId { get; set; } = null!;
+
+    private ObservableList<Event>? _events;
+
+    protected override void OnInitialized()
+    {
+        _events = new ObservableList<Event>(Client.ObserveEventsFor(DeviceId), StateHasChanged);
+    }
+
+    public void Clear()
+    {
+        if (_events is not null)
+        {
+            _events.Clear();
+            StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        _events?.Dispose();
+    }
+}
