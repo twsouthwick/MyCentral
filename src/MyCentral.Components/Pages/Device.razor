@@ -3,19 +3,21 @@
 @inject IServiceClient Client
 
 <div>
-    <h3>@DeviceId</h3>
+    <header class="pb-3 mb-4 border-bottom">
+        <span class="fs-4">@DeviceId</span>
+    </header>
 
-    <PostDeviceData DeviceId="@DeviceId" />
+    <div class="card-group">
+        <PostDeviceData DeviceId="@DeviceId" />
 
-    <p />
+        <div class="card">
 
-    <div class="card">
-
-        <div class="card-header">
-            Invoke Method
-        </div>
-        <div class="card-body">
-            <InvokeCommand DeviceId="@DeviceId" />
+            <div class="card-header">
+                Invoke Method
+            </div>
+            <div class="card-body">
+                <InvokeCommand DeviceId="@DeviceId" />
+            </div>
         </div>
     </div>
 

@@ -10,7 +10,8 @@
 @if (_message is not null)
 {
     <div class="alert alert-success" role="alert">
-        @_message
+        Invoked <b>@_message.Method</b>
+        <pre><code>@_message.Result</code></pre>
     </div>
 }
 
@@ -45,12 +46,13 @@
     private string? _method;
     private string? _payload;
     private string? _exceptionMessage;
-    private string? _message;
+    private InvokeResult? _message;
     private bool _isSending;
 
     private async Task Send()
     {
-        _message = _exceptionMessage = null;
+        _message = null;
+        _exceptionMessage = null;
 
         if (DeviceId is null || string.IsNullOrEmpty(_method) || string.IsNullOrEmpty(_payload))
         {
@@ -63,8 +65,9 @@
 
         try
         {
-            await Client.InvokeMethodAsync(DeviceId, _method, _payload);
-            _message = $"Invoked {_method}";
+            var result = await Client.InvokeMethodAsync(DeviceId, _method, _payload);
+
+            _message = new(_method, result);
         }
         catch (Exception e)
         {
@@ -73,4 +76,6 @@
 
         _isSending = false;
     }
+
+    private record InvokeResult(string Method, string Result);
 }

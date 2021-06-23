@@ -1,7 +1,7 @@
 ﻿@inject IServiceClient Client
 @implements IDisposable
 
-@if (IsEmpty)
+@if (_events is null || _events.Count == 0)
 {
     <div class="card-body">
         <div class="alert alert-info" role="alert">
@@ -14,6 +14,7 @@ else
     <table class="table">
         <tr>
             <th scope="col">Time</th>
+            <th scope="col">Subject</th>
             <th scope="col">Body</th>
         </tr>
 
@@ -21,7 +22,8 @@ else
         {
             <tr>
                 <td>@item.EnqueuedTime</td>
-                <td>@item.Body</td>
+                <td>@item.Subject</td>
+                <td><pre><code>@item.Body</code></pre></td>
             </tr>
         }
 
@@ -35,8 +37,6 @@ else
 @code {
     [Parameter]
     public string DeviceId { get; set; } = null!;
-
-    public bool IsEmpty => _events is null || _events.Count == 0;
 
     private ObservableList<Event>? _events;
 

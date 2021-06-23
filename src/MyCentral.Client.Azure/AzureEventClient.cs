@@ -15,10 +15,19 @@ namespace MyCentral.Client.Azure
         {
             _events = new EventHubConsumerClient(EventHubConsumerClient.DefaultConsumerGroupName, eventConnectionString);
             _observable = _events.ReadEventsAsync()
-                .Select(t => new Event(GetDeviceId(t.Data.SystemProperties), t.Data.EnqueuedTime, t.Data.EventBody.ToString(), t.Data.Properties, t.Data.SystemProperties))
+                .Select(t => new Event(GetDeviceId(t.Data.SystemProperties), GetSubject(t.Data.SystemProperties), t.Data.EnqueuedTime, t.Data.EventBody.ToString()))
                 .ToObservable();
         }
 
+        private static string GetSubject(IReadOnlyDictionary<string, object> properties)
+        {
+            if (properties.TryGetValue("dt-subject", out var subject))
+            {
+                return subject?.ToString() ?? string.Empty;
+            }
+
+            return string.Empty;
+        }
         private static string GetDeviceId(IReadOnlyDictionary<string, object> properties)
         {
             if (properties.TryGetValue("iothub-connection-device-id", out var deviceId))

@@ -45,7 +45,7 @@ namespace MyCentral.Web
         }
 
         [HttpPost("{deviceId}/{componentName}")]
-        public async Task<ActionResult> SendValue(string deviceId, [Required] string componentName)
+        public async Task<ActionResult> SendValue(string deviceId, string componentName)
         {
             var device = await _emulatedDevices.GetDeviceAsync(deviceId, HttpContext.RequestAborted);
 
