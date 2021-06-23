@@ -10,7 +10,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
 using MyCentral.Client.Azure;
 using MyCentral.Device.Emulation;
-using System;
 using System.Linq;
 
 namespace MyCentral.Web
