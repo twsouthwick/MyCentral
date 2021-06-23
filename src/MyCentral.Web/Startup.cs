@@ -33,7 +33,7 @@ namespace MyCentral.Web
 
             services.AddControllersWithViews(options =>
             {
-                options.Filters.Add(new UnauthorizedExceptionFilter());
+                options.Filters.Add(new DevicesExceptionFilter());
             });
             services.AddRazorPages();
             services.AddSingleton<TokenCredential, DefaultAzureCredential>();

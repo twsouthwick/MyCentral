@@ -4,7 +4,7 @@ using Microsoft.Azure.Devices.Common.Exceptions;
 
 namespace MyCentral.Web
 {
-    public class UnauthorizedExceptionFilter : IExceptionFilter
+    public class DevicesExceptionFilter : IExceptionFilter
     {
         public void OnException(ExceptionContext context)
         {
@@ -19,7 +19,6 @@ namespace MyCentral.Web
                 context.ExceptionHandled = true;
                 context.Result = new NotFoundResult();
             }
-
         }
     }
 }
