@@ -17,6 +17,10 @@ namespace MyCentral.Device.Emulation
         {
             deviceClient = client;
             deviceClient.SetDesiredPropertyUpdateCallbackAsync(DesiredPropertyUpdateCallback, deviceClient);
+            deviceClient.SetConnectionStatusChangesHandler((status, reason) =>
+            {
+
+            });
         }
 
         public Task SendAsync(string componentName, byte[] bytes)

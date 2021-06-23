@@ -1,10 +1,12 @@
 ﻿using Azure.Core;
 using Microsoft.Azure.Devices;
+using Microsoft.Azure.Devices.Common.Exceptions;
 using Microsoft.Azure.Devices.Shared;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,6 +31,20 @@ namespace MyCentral.Client.Azure
             Events = new AzureEventClient(_options.EventHubConnectionString);
             _client = ServiceClient.Create(_options.HostName, credential);
             _registry = RegistryManager.Create(_options.HostName, credential);
+        }
+
+        public async Task<string> InvokeMethodAsync(string deviceId, string methodName, string? payload = null)
+        {
+            var method = new CloudToDeviceMethod(methodName);
+
+            if (payload is not null)
+            {
+                method.SetPayloadJson(payload);
+            }
+
+            var result = await _client.InvokeDeviceMethodAsync(deviceId, method);
+
+            return result.GetPayloadAsJson();
         }
 
         public ValueTask DisposeAsync()

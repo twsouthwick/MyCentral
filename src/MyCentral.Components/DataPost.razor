@@ -32,7 +32,7 @@
 
 	private async Task Send()
 	{
-		if (_device is null || _component is null || _text is null)
+		if (_device is null || string.IsNullOrEmpty(_component) || string.IsNullOrEmpty(_text))
 		{
 			return;
 		}

@@ -9,5 +9,7 @@ namespace MyCentral.Device.Emulation
         DeviceCollection Collection { get; }
 
         Task<IEmulatedDevice?> GetDeviceAsync(string id, CancellationToken token);
+
+        Task StartAsync(CancellationToken token);
     }
 }

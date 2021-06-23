@@ -11,5 +11,7 @@ namespace MyCentral.Client
         IEventClient Events { get; }
 
         Task<DeviceCollection> GetDevicesAsync(CancellationToken token);
+
+        Task<string> InvokeMethodAsync(string deviceId, string methodName, string? payload = null);
     }
 }

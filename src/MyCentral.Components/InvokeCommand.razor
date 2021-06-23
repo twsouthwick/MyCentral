@@ -1,0 +1,76 @@
+﻿@inject IServiceClient Client
+
+@if (_exceptionMessage is not null)
+{
+    <div class="alert alert-danger" role="alert">
+        @_exceptionMessage
+    </div>
+}
+
+@if (_message is not null)
+{
+    <div class="alert alert-success" role="alert">
+        @_message
+    </div>
+}
+
+@if (_isSending)
+{
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+    </div>
+}
+
+@if (!_isSending && DeviceId is not null)
+{
+    <div class="form-group">
+        <label>
+            Method
+            <input class="form-control" @bind-value="@_method" />
+        </label>
+
+        <label>
+            Payload
+            <input class="form-control" @bind-value="@_payload" />
+        </label>
+    </div>
+
+    <button class="btn btn-primary" @onclick="Send">Send</button>
+}
+
+@code {
+    [Parameter]
+    public string? DeviceId { get; set; }
+
+    private string? _method;
+    private string? _payload;
+    private string? _exceptionMessage;
+    private string? _message;
+    private bool _isSending;
+
+    private async Task Send()
+    {
+        _message = _exceptionMessage = null;
+
+        if (DeviceId is null || string.IsNullOrEmpty(_method) || string.IsNullOrEmpty(_payload))
+        {
+            _exceptionMessage = "Values not set";
+            return;
+        }
+
+        _isSending = true;
+        StateHasChanged();
+
+        try
+        {
+            await Client.InvokeMethodAsync(DeviceId, _method, _payload);
+            _message = $"Invoked {_method}";
+        }
+        catch (Exception e)
+        {
+            _exceptionMessage = e.Message;
+        }
+
+        _isSending = false;
+    }
+}

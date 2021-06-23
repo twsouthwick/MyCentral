@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using MyCentral.Client;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,7 +23,20 @@ namespace MyCentral.Device.Emulation
 
         public DeviceCollection Collection { get; }
 
-        public Task<IEmulatedDevice?> GetDeviceAsync(string id, CancellationToken token)
+        public async Task<IEmulatedDevice?> GetDeviceAsync(string id, CancellationToken token)
+        {
+            await StartAsync(token);
+
+            if (_devices.TryGetValue(id, out var task))
+            {
+                return await task;
+            }
+
+            return null;
+        }
+
+        [MemberNotNull(nameof(_devices))]
+        public Task StartAsync(CancellationToken token)
         {
             if (_devices is null)
             {
@@ -35,12 +49,7 @@ namespace MyCentral.Device.Emulation
                 }
             }
 
-            if (_devices.TryGetValue(id, out var task))
-            {
-                return task!;
-            }
-
-            return Task.FromResult<IEmulatedDevice?>(null);
+            return Task.CompletedTask;
         }
     }
 }

@@ -31,7 +31,10 @@ namespace MyCentral.Web
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new UnauthorizedExceptionFilter());
+            });
             services.AddRazorPages();
             services.AddSingleton<TokenCredential, DefaultAzureCredential>();
             services.AddAzureMyCentral(options => Configuration.GetSection("IoTHub").Bind(options));

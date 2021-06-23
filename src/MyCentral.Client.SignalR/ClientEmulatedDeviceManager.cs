@@ -1,6 +1,5 @@
 ﻿using MyCentral.Device.Emulation;
 using System;
-using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,12 +8,10 @@ namespace MyCentral.Client
 {
     public class ClientEmulatedDeviceManager : IEmulatedDeviceManager
     {
-        private readonly IServiceClient _client;
         private readonly HttpClient _http;
 
-        public ClientEmulatedDeviceManager(IServiceClient client, HttpClient http)
+        public ClientEmulatedDeviceManager(HttpClient http)
         {
-            _client = client;
             _http = http;
         }
 
@@ -22,6 +19,9 @@ namespace MyCentral.Client
 
         public Task<IEmulatedDevice?> GetDeviceAsync(string id, CancellationToken token)
             => Task.FromResult<IEmulatedDevice?>(new EmulatedDevice(_http, id));
+
+        public Task StartAsync(CancellationToken token)
+            => Task.CompletedTask;
 
         private class EmulatedDevice : IEmulatedDevice
         {

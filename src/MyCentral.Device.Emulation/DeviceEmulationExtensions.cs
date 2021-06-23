@@ -12,6 +12,7 @@ namespace MyCentral.Device.Emulation
             services.AddSingleton<IEmulatedDeviceManager, DeviceManager>();
             services.AddOptions<DeviceCollection>()
                 .Configure(configure);
+            services.AddHostedService<EmulatedDeviceBackgroundService>();
         }
     }
 }
