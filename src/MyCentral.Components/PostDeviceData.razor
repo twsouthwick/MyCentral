@@ -2,41 +2,50 @@
 
 @if (_device is not null)
 {
-	<div class="form-group">
-	 <label>
-	  Component
-	  <input class="form-control" @bind-value="@_component" />
-	 </label>
+    <div class="card">
 
-	 <label>
-	  Data
-	  <input class="form-control" @bind-value="@_text" />
-	 </label>
-	</div>
+        <div class="card-header">
+            Send property
+        </div>
 
-	<button class="btn btn-primary" @onclick="Send">Send</button>
+        <div class="card-body">
+            <div class="form-group">
+                <label>
+                    Component
+                    <input class="form-control" @bind-value="@_component" />
+                </label>
+
+                <label>
+                    Data
+                    <input class="form-control" @bind-value="@_text" />
+                </label>
+            </div>
+
+            <button class="btn btn-primary" @onclick="Send">Send</button>
+        </div>
+    </div>
 }
 
 @code {
-	private string? _component;
-	private string? _text;
-	private IEmulatedDevice? _device;
+    private string? _component;
+    private string? _text;
+    private IEmulatedDevice? _device;
 
-	[Parameter]
-	public string Name { get; set; } = null!;
+    [Parameter]
+    public string DeviceId { get; set; } = null!;
 
-	protected override async Task OnParametersSetAsync()
-	{
-		_device = await EmulatedDevices.GetDeviceAsync(Name, default);
-	}
+    protected override async Task OnParametersSetAsync()
+    {
+        _device = await EmulatedDevices.GetDeviceAsync(DeviceId, default);
+    }
 
-	private async Task Send()
-	{
-		if (_device is null || string.IsNullOrEmpty(_component) || string.IsNullOrEmpty(_text))
-		{
-			return;
-		}
+    private async Task Send()
+    {
+        if (_device is null || string.IsNullOrEmpty(_component) || string.IsNullOrEmpty(_text))
+        {
+            return;
+        }
 
-		await _device.SendAsync(_component, _text);
-	}
+        await _device.SendAsync(_component, _text);
+    }
 }
