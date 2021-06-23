@@ -22,18 +22,12 @@
             Events
         </div>
 
-        <EventList DeviceId="@DeviceId" @ref="_eventList" />
-
-        <div class="card-body">
-            <a href="#" class="card-link" @onclick="() => _eventList?.Clear()">Clear</a>
-        </div>
+        <EventList DeviceId="@DeviceId" />
     </div>
 </div>
 
 
 @code {
-    private EventList? _eventList;
-
     [Parameter]
     public string DeviceId { get; set; } = null!;
 }

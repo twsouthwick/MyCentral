@@ -1,7 +1,15 @@
 ﻿@inject IServiceClient Client
 @implements IDisposable
 
-@if (_events is not null)
+@if (IsEmpty)
+{
+    <div class="card-body">
+        <div class="alert alert-info" role="alert">
+            No events available
+        </div>
+    </div>
+}
+else
 {
     <table class="table">
         <tr>
@@ -16,27 +24,25 @@
                 <td>@item.Body</td>
             </tr>
         }
+
     </table>
+
+    <div class="card-body">
+        <a href="javascript:void(0);" class="card-link" @onclick="() => _events?.Clear()">Clear</a>
+    </div>
 }
 
 @code {
     [Parameter]
     public string DeviceId { get; set; } = null!;
 
+    public bool IsEmpty => _events is null || _events.Count == 0;
+
     private ObservableList<Event>? _events;
 
     protected override void OnInitialized()
     {
         _events = new ObservableList<Event>(Client.ObserveEventsFor(DeviceId), StateHasChanged);
-    }
-
-    public void Clear()
-    {
-        if (_events is not null)
-        {
-            _events.Clear();
-            StateHasChanged();
-        }
     }
 
     public void Dispose()
