@@ -29,9 +29,6 @@ namespace MyCentral.Client.Azure
             return string.Empty;
         }
 
-        private static string GetEventHubName(string hostname)
-            => hostname.Split('.')[0];
-
         public ValueTask DisposeAsync()
             => _events.DisposeAsync();
 
