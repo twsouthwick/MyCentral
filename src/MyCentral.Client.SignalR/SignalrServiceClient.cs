@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading;
@@ -44,14 +43,8 @@ namespace MyCentral.Client.SignalR
         {
             using var response = await _client.PostAsync($"/api/devices/{deviceId}/invoke/{methodName}", new StringContent(payload ?? string.Empty));
 
-            if (!response.IsSuccessStatusCode)
-            {
-                throw response.StatusCode switch
-                {
-                    HttpStatusCode.Unauthorized => throw new UnauthorizedAccessException(),
-                    var code => throw new InvalidOperationException(code.ToString()),
-                };
-            }
+            response.ThrowIfFailed();
+
             return await response.Content.ReadAsStringAsync();
         }
     }

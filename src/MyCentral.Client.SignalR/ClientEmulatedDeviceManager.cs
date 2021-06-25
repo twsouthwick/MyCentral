@@ -40,7 +40,12 @@ namespace MyCentral.Client
 
             public Task SendAsync(string componentName, string content) => SendAsync(componentName, new StringContent(content));
 
-            public Task SendAsync(string componentName, HttpContent content) => _client.PostAsync($"api/devices/{_name}/{componentName}", content);
+            public async Task SendAsync(string componentName, HttpContent content)
+            {
+                using var result = await _client.PostAsync($"api/devices/{_name}/{componentName}", content);
+
+                result.ThrowIfFailed();
+            }
         }
     }
 }
