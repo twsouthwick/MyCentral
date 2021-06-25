@@ -1,6 +1,5 @@
 ﻿using Azure.Core;
 using Microsoft.Azure.Devices;
-using Microsoft.Azure.Devices.Shared;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
