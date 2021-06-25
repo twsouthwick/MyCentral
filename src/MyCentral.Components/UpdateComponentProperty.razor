@@ -1,0 +1,96 @@
+﻿@inject IServiceClient Client
+
+<div class="card">
+
+    <div class="card-header">
+        Send property
+    </div>
+
+    <div class="card-body">
+
+        @if (_isSending)
+        {
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+            </div>
+        }
+
+        @if (_exceptionMessage is not null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @_exceptionMessage
+            </div>
+        }
+
+        @if (_message is not null)
+        {
+            <div class="alert alert-success" role="alert">
+                Sent event to component <b>@_message.Component:@_message.PropertyName</b>
+                <pre><code>@_message.Payload</code></pre>
+            </div>
+        }
+
+        @if (!_isSending)
+        {
+            <div class="form-group">
+                <label>
+                    Component
+                    <input class="form-control" @bind-value="@_component" />
+                </label>
+
+                <label>
+                    Property
+                    <input class="form-control" @bind-value="@_propertyName" />
+                </label>
+
+                <label>
+                    Payload
+                    <input class="form-control" @bind-value="@_payload" />
+                </label>
+            </div>
+
+            <button class="btn btn-primary" @onclick="Send">Send</button>
+        }
+    </div>
+</div>
+
+@code {
+    private string? _component;
+    private string? _propertyName;
+    private string? _payload;
+    private string? _exceptionMessage;
+    private InvokeResult? _message;
+    private bool _isSending;
+
+    [Parameter]
+    public string DeviceId { get; set; } = null!;
+
+    private async Task Send()
+    {
+        _message = null;
+        _exceptionMessage = null;
+
+        if (string.IsNullOrEmpty(_component) || string.IsNullOrEmpty(_propertyName) || string.IsNullOrEmpty(_payload))
+        {
+            return;
+        }
+
+        _isSending = true;
+        StateHasChanged();
+
+        try
+        {
+            await Client.UpdatePropertyAsync(DeviceId, _component, _propertyName, _payload);
+            _message = new(_component, _propertyName, _payload);
+        }
+        catch (Exception e)
+        {
+            _exceptionMessage = e.Message;
+        }
+
+        _isSending = false;
+        StateHasChanged();
+    }
+
+    private record InvokeResult(string Component, string PropertyName, string Payload);
+}

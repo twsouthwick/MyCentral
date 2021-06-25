@@ -48,5 +48,12 @@ namespace MyCentral.Client.SignalR
 
             return await response.Content.ReadAsStringAsync();
         }
+
+        public async Task UpdatePropertyAsync(string deviceId, string componentName, string propertyName, string propertyValue)
+        {
+            using var response = await _client.PostAsync($"/api/devices/{deviceId}/{componentName}/{propertyName}/{propertyValue}", new StringContent("{}"));
+
+            response.ThrowIfFailed();
+        }
     }
 }

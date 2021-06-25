@@ -14,5 +14,7 @@ namespace MyCentral.Client
         IAsyncEnumerable<string> GetDevicesAsync(CancellationToken token);
 
         Task<string> InvokeMethodAsync(string deviceId, string methodName, string? payload = null);
+
+        Task UpdatePropertyAsync(string deviceId, string componentName, string propertyName, string propertyValue);
     }
 }

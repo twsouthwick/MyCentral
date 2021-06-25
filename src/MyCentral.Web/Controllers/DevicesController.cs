@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyCentral.Client;
-using MyCentral.Device.Emulation;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -12,12 +11,10 @@ namespace MyCentral.Web
     public class DevicesController : ControllerBase
     {
         private readonly IServiceClient _client;
-        private readonly IEmulatedDeviceManager _emulatedDevices;
 
-        public DevicesController(IServiceClient client, IEmulatedDeviceManager emulatedDevices)
+        public DevicesController(IServiceClient client)
         {
             _client = client;
-            _emulatedDevices = emulatedDevices;
         }
 
         [HttpGet]
@@ -26,35 +23,28 @@ namespace MyCentral.Web
         [HttpPost("{deviceId}/invoke/{method}")]
         public async Task<ActionResult> InvokeMethod(string deviceId, string method)
         {
-            var content = await ReadBodyContents();
+            var content = await ReadBodyContentsAsync();
 
             var result = await _client.InvokeMethodAsync(deviceId, method, content);
 
             if (result == "null")
             {
-                return NotFound();
+                return BadRequest();
             }
 
             return Content(result, "application/json");
         }
 
-        private async Task<string> ReadBodyContents()
+        private async Task<string> ReadBodyContentsAsync()
         {
             using var reader = new StreamReader(Request.Body);
             return await reader.ReadToEndAsync();
         }
 
-        [HttpPost("{deviceId}/{componentName}")]
-        public async Task<ActionResult> SendValue(string deviceId, string componentName)
+        [HttpPost("{deviceId}/{componentName}/{propertyName}/{propertyValue}")]
+        public async Task<ActionResult> UpdatePropertyAsync(string deviceId, string componentName, string propertyName, string propertyValue)
         {
-            var device = await _emulatedDevices.GetDeviceAsync(deviceId, HttpContext.RequestAborted);
-
-            if (device is null)
-            {
-                return NotFound(new { DeviceId = deviceId });
-            }
-
-            await device.SendAsync(componentName, Request.Body);
+            await _client.UpdatePropertyAsync(deviceId, componentName, propertyName, propertyValue);
 
             return NoContent();
         }

@@ -105,8 +105,10 @@ namespace MyCentral.Device.Emulation
             var comps = desiredProperties.EnumerateComponents();
             foreach (var c in comps)
             {
-                var ccb = desiredPropertyCallbacks[c];
-                ccb?.Invoke(desiredProperties);
+                if (desiredPropertyCallbacks.TryGetValue(c, out var ccb))
+                {
+                    ccb?.Invoke(desiredProperties);
+                }
             }
 
             return Task.FromResult(0);
