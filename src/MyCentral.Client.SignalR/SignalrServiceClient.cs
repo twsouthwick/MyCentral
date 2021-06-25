@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,7 +27,7 @@ namespace MyCentral.Client.SignalR
             return Events.DisposeAsync();
         }
 
-        public async IAsyncEnumerable<string> GetDevicesAsync(CancellationToken token)
+        public async IAsyncEnumerable<string> GetDevicesAsync([EnumeratorCancellation] CancellationToken token)
         {
             var collection = await _client.GetFromJsonAsync<IEnumerable<string>>("/api/devices", token);
 
