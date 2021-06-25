@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyCentral.Client;
 using MyCentral.Device.Emulation;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -21,7 +21,7 @@ namespace MyCentral.Web
         }
 
         [HttpGet]
-        public Task<DeviceCollection> GetDevices() => _client.GetDevicesAsync(HttpContext.RequestAborted);
+        public IAsyncEnumerable<string> GetDevices() => _client.GetDevicesAsync(HttpContext.RequestAborted);
 
         [HttpPost("{deviceId}/invoke/{method}")]
         public async Task<ActionResult> InvokeMethod(string deviceId, string method)

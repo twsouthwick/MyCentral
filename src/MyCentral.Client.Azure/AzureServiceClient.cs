@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -53,7 +54,7 @@ namespace MyCentral.Client.Azure
             return new ValueTask();
         }
 
-        public async IAsyncEnumerable<Twin> GetDevicesAsync([EnumeratorCancellation] CancellationToken token)
+        public async IAsyncEnumerable<string> GetDevicesAsync([EnumeratorCancellation] CancellationToken token)
         {
             var query = _registry.CreateQuery(@"select deviceId,
                               lastActivityTime,
@@ -69,11 +70,19 @@ namespace MyCentral.Client.Azure
 
                 foreach (var r in result)
                 {
-                    yield break;
+                    var twin = JsonSerializer.Deserialize<Twin>(r);
+
+                    if (twin.deviceId is not null)
+                    {
+                        yield return twin.deviceId;
+                    }
                 }
             }
         }
 
-        Task<DeviceCollection> IServiceClient.GetDevicesAsync(CancellationToken token) => Task.FromResult(_devices);
+        private struct Twin
+        {
+            public string deviceId { get; set; }
+        }
     }
 }

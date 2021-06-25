@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -26,11 +28,17 @@ namespace MyCentral.Client.SignalR
             return Events.DisposeAsync();
         }
 
-        public async Task<DeviceCollection> GetDevicesAsync(CancellationToken token)
+        public async IAsyncEnumerable<string> GetDevicesAsync(CancellationToken token)
         {
-            var collection = await _client.GetFromJsonAsync<DeviceCollection>("/api/devices", token);
+            var collection = await _client.GetFromJsonAsync<IEnumerable<string>>("/api/devices", token);
 
-            return collection ?? new DeviceCollection();
+            if (collection is not null)
+            {
+                foreach (var item in collection)
+                {
+                    yield return item;
+                }
+            }
         }
 
         public async Task<string> InvokeMethodAsync(string deviceId, string methodName, string? payload = null)
