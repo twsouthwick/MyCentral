@@ -1,40 +1,56 @@
 ﻿@inject IServiceClient Client
 @implements IDisposable
 
-@if (_events is not null && _events.Count > 0)
+@if (_events is not null)
 {
-    <table class="table">
-        <tr>
-            <th scope="col">Time</th>
-            <th scope="col">Subject</th>
-            <th scope="col">Body</th>
-        </tr>
-
-        @foreach (var item in _events)
-        {
+    if (_events.Count > 0)
+    {
+        <table class="table">
             <tr>
-                <td>@item.EnqueuedTime</td>
-                <td>@item.Subject</td>
-                <td><pre><code>@item.Body</code></pre></td>
+                <th scope="col">Time</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Body</th>
             </tr>
-        }
 
-    </table>
+            @foreach (var item in _events)
+            {
+                <tr>
+                    <td>@item.EnqueuedTime</td>
+                    <td>@item.Subject</td>
+                    <td><pre><code>@item.Body</code></pre></td>
+                </tr>
+            }
 
-    <div class="card-body">
-        <a href="javascript:void(0);" class="card-link" @onclick="() => _events?.Clear()">Clear</a>
-    </div>
+        </table>
+
+        <div class="card-body">
+            <a href="javascript:void(0);" class="card-link" @onclick="() => _events?.Clear()">Clear</a>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-primary" role="alert">
+            No events have been sent.
+        </div>
+    }
 }
 
 @code {
     [Parameter]
-    public string DeviceId { get; set; } = null!;
+    public string? DeviceId { get; set; }
 
     private ObservableList<Event>? _events;
 
     protected override void OnInitialized()
     {
-        _events = new ObservableList<Event>(Client.ObserveEventsFor(DeviceId), StateHasChanged);
+        if (DeviceId is string deviceId)
+        {
+            _events = new ObservableList<Event>(Client.ObserveEventsFor(DeviceId), StateHasChanged);
+        }
+        else
+        {
+            _events = new ObservableList<Event>(Client.Events, StateHasChanged);
+        }
     }
 
     public void Dispose()

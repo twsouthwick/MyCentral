@@ -17,6 +17,9 @@ namespace MyCentral.Web
             _client = client;
         }
 
+        [HttpGet("metadata")]
+        public ServiceMetadata GetMetadata() => new(_client.HostName);
+
         [HttpGet]
         public IAsyncEnumerable<string> GetDevices() => _client.GetDevicesAsync(HttpContext.RequestAborted);
 

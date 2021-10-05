@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
@@ -8,22 +9,30 @@ using System.Threading.Tasks;
 
 namespace MyCentral.Client.SignalR
 {
-    public class SignalrServiceClient : IServiceClient, IAsyncDisposable
+    public class SignalrServiceClient : IServiceClient, IAsyncDisposable, INotifyPropertyChanged
     {
         private readonly HttpClient _client;
+        private readonly CancellationTokenSource _cts;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public SignalrServiceClient(IEventClient eventClient, HttpClient client)
         {
             Events = eventClient;
             _client = client;
+            _cts = new CancellationTokenSource();
+
+            _ = SetNameAsync();
         }
 
         public IEventClient Events { get; }
 
-        public string HostName { get; } = string.Empty;
+        public string HostName { get; private set; } = string.Empty;
 
         public ValueTask DisposeAsync()
         {
+            _cts.Cancel();
+            _cts.Dispose();
             return Events.DisposeAsync();
         }
 
@@ -37,6 +46,23 @@ namespace MyCentral.Client.SignalR
                 {
                     yield return item;
                 }
+            }
+        }
+
+        private async Task SetNameAsync()
+        {
+            try
+            {
+                var metadata = await _client.GetFromJsonAsync<ServiceMetadata>("/api/devices/metadata", _cts.Token);
+
+                if (metadata is not null)
+                {
+                    HostName = metadata.Name;
+                    PropertyChanged?.Invoke(this, new(nameof(HostName)));
+                }
+            }
+            catch (Exception)
+            {
             }
         }
 

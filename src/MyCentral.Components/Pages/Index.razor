@@ -1,0 +1,35 @@
+﻿@page "/"
+
+@using System.ComponentModel;
+
+@inject IServiceClient Client
+@implements IDisposable
+
+<h1>@Client.HostName</h1>
+
+<EventList />
+
+@code {
+    protected override void OnInitialized()
+    {
+        if (Client is INotifyPropertyChanged changed)
+        {
+            changed.PropertyChanged += OnChange;
+        }
+
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        if (Client is INotifyPropertyChanged changed)
+        {
+            changed.PropertyChanged -= OnChange;
+        }
+    }
+
+    private async void OnChange(object? sender, PropertyChangedEventArgs args)
+    {
+        await InvokeAsync(() => StateHasChanged());
+    }
+}
