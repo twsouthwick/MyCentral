@@ -1,15 +1,7 @@
 ﻿@inject IServiceClient Client
 @implements IDisposable
 
-@if (_events is null || _events.Count == 0)
-{
-    <div class="card-body">
-        <div class="alert alert-info" role="alert">
-            No events available
-        </div>
-    </div>
-}
-else
+@if (_events is not null && _events.Count > 0)
 {
     <table class="table">
         <tr>

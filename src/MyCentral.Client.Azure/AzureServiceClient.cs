@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using Microsoft.Azure.Devices;
 using Microsoft.Azure.Devices.Shared;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -15,14 +16,19 @@ namespace MyCentral.Client.Azure
         private readonly ServiceClient _client;
         private readonly RegistryManager _registry;
         private readonly IoTHubOptions _options;
+        private readonly ILogger<AzureServiceClient> _logger;
 
         public string HostName => _options.HostName;
 
         public IEventClient Events { get; }
 
-        public AzureServiceClient(IOptions<IoTHubOptions> options, TokenCredential credential)
+        public AzureServiceClient(
+            IOptions<IoTHubOptions> options,
+            TokenCredential credential,
+            ILogger<AzureServiceClient> logger)
         {
             _options = options.Value;
+            _logger = logger;
 
             Events = new AzureEventClient(_options.EventHubConnectionString);
             _client = ServiceClient.Create(_options.HostName, credential);
@@ -54,12 +60,30 @@ namespace MyCentral.Client.Azure
         public async IAsyncEnumerable<string> GetDevicesAsync([EnumeratorCancellation] CancellationToken token)
         {
             var query = _registry.CreateQuery(@"select deviceId,
+                              lastActivityTime,
+                              connectionState,
+                              status,
+                              properties.reported.[[$iotin:deviceinfo]].manufacturer.value as manufacturer
                        from devices
                        where capabilities.iotEdge != true");
 
             while (query.HasMoreResults)
             {
-                var result = await query.GetNextAsJsonAsync();
+                var result = default(IEnumerable<string>);
+
+                try
+                {
+                    result = await query.GetNextAsJsonAsync();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogWarning(e, "Error getting device info from {HostName}", HostName);
+                }
+
+                if (result is null)
+                {
+                    yield break;
+                }
 
                 foreach (var r in result)
                 {
